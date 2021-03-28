@@ -1,12 +1,11 @@
 package com.integrador.sicdet.endpoint;
 
-import com.integrador.sicdet.config.ResponseBody;
 import com.integrador.sicdet.config.UserToken;
 import com.integrador.sicdet.service.LoginService;
+import com.utilssected.sected.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import com.utilssected.sected.utils.ResponseBody;
 
 @RestController
 public class LoginEndpoint {
@@ -30,10 +30,10 @@ public class LoginEndpoint {
         try {
             userToken = loginService.createToken(params, headers);
             System.out.println("Login contoller");
-            res = new ResponseEntity<>(HttpStatus.OK);
+            res=Utils.response200OK(userToken);
         }catch(Exception e) {
             LOG.info("ERROR");
-            res = new ResponseEntity<>(HttpStatus.METHOD_FAILURE);
+            res = Utils.handle(e, "Error");
         }
 
         return res;

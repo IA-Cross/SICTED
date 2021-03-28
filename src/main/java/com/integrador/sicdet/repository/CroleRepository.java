@@ -5,4 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CroleRepository extends JpaRepository<Crole,Integer>{
+    Crole findById(int id);
+
+    Crole findByDescription(String description);
 }
