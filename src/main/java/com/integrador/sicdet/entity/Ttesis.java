@@ -1,17 +1,16 @@
 package com.integrador.sicdet.entity;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
 @Entity
 @Table(name= "ttesis")
+@NamedQueries({
+		//@NamedQuery(name = "Ttesis.search",query = "select u from Ttesis u where u.status=1 and U.title=:title")
+})
 public class Ttesis implements Serializable{ 
 
 	@Id
@@ -24,6 +23,8 @@ public class Ttesis implements Serializable{
 	private Integer idCatDegree;
 	@Column(name = "id_tcatalog")
 	private Integer idTcatalog;
+	@Column(name = "title")
+	private String title;
 	@Column(name = "year_start")
 	private Date yearStart;
 	@Column(name = "keywords")
@@ -156,6 +157,10 @@ public class Ttesis implements Serializable{
 	public void setModifiedBy(Integer modifiedBy){
 		  this.modifiedBy=modifiedBy;
 	}
+
+	public String getTitle() { return title; }
+
+	public void setTitle(String title) { this.title = title; }
 
 	@Override
 	public String toString() {

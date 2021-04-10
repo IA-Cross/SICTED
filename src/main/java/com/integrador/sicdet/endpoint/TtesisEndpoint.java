@@ -75,4 +75,19 @@ public class TtesisEndpoint{
 		}
 		return response;
 	}
+
+	@GetMapping("/searchTesis")
+	public ResponseEntity<ResponseBody<List<Ttesis>>>searchTesis(@RequestParam("page") int page,@RequestParam("size") int size, @RequestBody Map<String,Object> data){
+		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
+
+		ResponseEntity<ResponseBody<List<Ttesis>>> response=null;
+		List<Ttesis>ttesisList=null;
+		try{
+			ttesisList=ttesisService.findAll(page,size);
+			response=Utils.<List<Ttesis>>response(HttpStatus.OK,"Lista encontrada",ttesisList);
+		}catch (Exception e){
+			response=Utils.<List<Ttesis>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesisList);
+		}
+		return response;
+	}
 }

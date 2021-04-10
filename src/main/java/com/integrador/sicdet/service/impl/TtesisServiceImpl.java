@@ -107,6 +107,11 @@ public class TtesisServiceImpl implements TtesisService{
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
 				ttesisOptional.get().setModifiedBy(modifiedBy);
 			}
+
+			if(data.containsKey("title")){
+				String title = data.get("title").toString();
+				ttesisOptional.get().setTitle(title);
+			}
 			ttesisRepository.save(ttesisOptional.get());
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
@@ -140,6 +145,42 @@ public class TtesisServiceImpl implements TtesisService{
 		}
 		LOGGER.debug(">>>> findAll <<<< ttesisList: {}",ttesisList);
 		return ttesisList;
+	}
+
+	@Override
+	public List<Ttesis> searchTesis(int page, int size, Map<String, Object> data) throws Exception {
+		LOGGER.debug(">>>> update->id: {}, ttesis: {}",data);
+		Pageable pageable= PageRequest.of(page,size);
+		boolean titleFlag=false;
+		boolean carrerFlag=false;
+		boolean categoryFlag=false;
+		boolean advisorFlag=false;
+		boolean themeFlag=false;
+		boolean authorFlag=false;
+		boolean keywordsFlag=false;
+		try{
+			//idAsesor
+				String title = data.get("title").toString();
+				titleFlag=true;
+				String career = data.get("career").toString();
+				carrerFlag=true;
+				String advisor = data.get("advisor").toString();
+				advisorFlag=true;
+				String theme = data.get("theme").toString();
+				themeFlag=true;
+				String author = data.get("author").toString();
+				authorFlag=true;
+				String keywords = data.get("keywords").toString();
+				keywordsFlag=true;
+				String category = data.get("category").toString();
+				categoryFlag=true;
+
+
+		}catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+		return null;
 	}
 
 }

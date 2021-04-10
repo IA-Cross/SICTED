@@ -7,4 +7,5 @@ public interface TtesisService{
 	void update(Integer id, Map<String,Object> data) throws Exception;
 	void delete(Integer id) throws Exception;
 	List<Ttesis> findAll(int page,int size) throws Exception;
+	List<Ttesis> searchTesis(int page,int size,Map<String,Object> data) throws Exception;
 }
