@@ -1,7 +1,10 @@
 package com.integrador.sicdet.service.impl;
 
+import com.integrador.sicdet.entity.Tasesor;
 import com.integrador.sicdet.entity.Ttesis;
+import com.integrador.sicdet.entity.Ttesista;
 import com.integrador.sicdet.repository.TtesisRepository;
+import com.integrador.sicdet.repository.TtesistaRepository;
 import com.integrador.sicdet.service.TtesisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,8 @@ public class TtesisServiceImpl implements TtesisService{
 
 	@Autowired
 	private TtesisRepository ttesisRepository;
+	@Autowired
+	private TtesistaRepository tesistaRepo;
 
 	@Override
 	public void insert(Ttesis ttesis ) throws Exception{
@@ -44,8 +49,8 @@ public class TtesisServiceImpl implements TtesisService{
 			}
 			//idAsesor
 			if(data.containsKey("idAsesor")){
-				Integer idAsesor = (Integer)data.get("idAsesor");
-				ttesisOptional.get().setIdAsesor(idAsesor);
+				ttesisOptional.get().setIdAsesor(new Tasesor());
+				ttesisOptional.get().getIdAsesor().setId((Integer)data.get("idAsesor"));
 			}
 			//idCatDegree
 			if(data.containsKey("idCatDegree")){
@@ -133,12 +138,11 @@ public class TtesisServiceImpl implements TtesisService{
 		}
 	}
 	@Override
-	public List<Ttesis> findAll(int page,int size) throws Exception{
-		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
+	public List<Ttesis> findAll() throws Exception{
+		LOGGER.debug(">>>> findAll <<<<");
 		List<Ttesis>ttesisList=null;
 		try{
-			Pageable pageable= PageRequest.of(page,size);
-			ttesisList = ttesisRepository.findAll(pageable).toList();
+			ttesisList = ttesisRepository.findAllActive();
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -148,39 +152,47 @@ public class TtesisServiceImpl implements TtesisService{
 	}
 
 	@Override
-	public List<Ttesis> searchTesis(int page, int size, Map<String, Object> data) throws Exception {
+	public List<Ttesis> searchTesis(int start, int limit, Map<String, Object> data) throws Exception {
 		LOGGER.debug(">>>> update->id: {}, ttesis: {}",data);
-		Pageable pageable= PageRequest.of(page,size);
-		boolean titleFlag=false;
-		boolean carrerFlag=false;
-		boolean categoryFlag=false;
-		boolean advisorFlag=false;
-		boolean themeFlag=false;
-		boolean authorFlag=false;
-		boolean keywordsFlag=false;
+		List<Ttesis>ttesisList=null;
+		List<Ttesis>ttesisList2=null;
+		List<Ttesis>ttesisListFinal=null;
+		Ttesista tesista = null;
 		try{
-			//idAsesor
 				String title = data.get("title").toString();
-				titleFlag=true;
-				String career = data.get("career").toString();
-				carrerFlag=true;
-				String advisor = data.get("advisor").toString();
-				advisorFlag=true;
-				String theme = data.get("theme").toString();
-				themeFlag=true;
+				int advisor = Integer.parseInt(data.get("advisor").toString());
 				String author = data.get("author").toString();
-				authorFlag=true;
-				String keywords = data.get("keywords").toString();
-				keywordsFlag=true;
-				String category = data.get("category").toString();
-				categoryFlag=true;
-
-
+			//Se busca por titulo y asesor
+			ttesisList=ttesisRepository.searchTesis(title,advisor);
+			//Se busca por autor
+			tesista= tesistaRepo.findByName(author);
+			if (tesista!=null){
+				ttesisList2=ttesisRepository.findByIdActive(tesista.getId());
+				boolean tesisEquals=false;
+				//Se verifica que no sean iguales para poder unir las 2 listas
+				for (int i=start; i<ttesisList2.size();i++) {
+					ttesisList.addAll(ttesisList2);
+					for (Ttesis ttesis : ttesisList) {
+						if (ttesisList2.get(i).getTitle().equals(ttesis.getTitle())) {
+							tesisEquals = true;
+							break;
+						}
+					}
+					//Si la bandera de igual no se activa, se agrega a la lista
+					if(!tesisEquals)
+						ttesisList.add(ttesisList2.get(i));
+					else
+						tesisEquals=false;
+				}
+			}
+			for (int i=start; i<ttesisList.size()&&ttesisListFinal.size()<limit;i++){
+				ttesisListFinal.add(ttesisList.get(i));
+			}
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
 		}
-		return null;
+		return ttesisListFinal;
 	}
 
 }

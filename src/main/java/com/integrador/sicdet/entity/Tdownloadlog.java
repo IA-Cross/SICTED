@@ -1,11 +1,7 @@
 package com.integrador.sicdet.entity;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,8 +14,9 @@ public class Tdownloadlog implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	@Column(name = "ttesis_id")
-	private Integer ttesisId;
+	@ManyToOne
+	@JoinColumn(name = "ttesis_id",referencedColumnName = "id")
+	private Ttesis ttesisId;
 	@Column(name = "created_at")
 	private Date createdAt;
 	@Column(name = "created_by")
@@ -33,13 +30,9 @@ public class Tdownloadlog implements Serializable{
 		  this.id=id;
 	}
 
-	public Integer getTtesisId(){
-		 return ttesisId;
-	}
+	public Ttesis getTtesisId() { return ttesisId; }
 
-	public void setTtesisId(Integer ttesisId){
-		  this.ttesisId=ttesisId;
-	}
+	public void setTtesisId(Ttesis ttesisId) { this.ttesisId = ttesisId; }
 
 	public Date getCreatedAt(){
 		 return createdAt;

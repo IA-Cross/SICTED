@@ -1,6 +1,7 @@
 package com.integrador.sicdet.service.impl;
 
 import com.integrador.sicdet.entity.TcorrectionDates;
+import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.repository.TcorrectionDatesRepository;
 import com.integrador.sicdet.service.TcorrectionDatesService;
 import org.slf4j.Logger;
@@ -44,8 +45,8 @@ public class TcorrectionDatesServiceImpl implements TcorrectionDatesService{
 			}
 			//idTesis
 			if(data.containsKey("idTesis")){
-				Integer idTesis = (Integer)data.get("idTesis");
-				tcorrectionDatesOptional.get().setIdTesis(idTesis);
+				tcorrectionDatesOptional.get().setIdTesis(new Ttesis());
+				tcorrectionDatesOptional.get().getIdTesis().setId((Integer)data.get("idTesis"));
 			}
 			//date
 			if(data.containsKey("date")){

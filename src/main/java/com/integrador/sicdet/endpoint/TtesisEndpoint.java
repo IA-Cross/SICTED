@@ -63,12 +63,12 @@ public class TtesisEndpoint{
 	}
 
 	@GetMapping("/findAll")
-	public ResponseEntity<ResponseBody<List<Ttesis>>> findAll(@RequestParam("page") int page,@RequestParam("size") int size){
-		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
+	public ResponseEntity<ResponseBody<List<Ttesis>>> findAll(){
+		LOGGER.debug(">>>> findAll <<<<");
 		ResponseEntity<ResponseBody<List<Ttesis>>> response=null;
 		List<Ttesis>ttesisList=null;
 		try{
-			ttesisList=ttesisService.findAll(page,size);
+			ttesisList=ttesisService.findAll();
 			response=Utils.<List<Ttesis>>response(HttpStatus.OK,"Lista encontrada",ttesisList);
 		}catch (Exception e){
 			response=Utils.<List<Ttesis>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesisList);
@@ -83,7 +83,7 @@ public class TtesisEndpoint{
 		ResponseEntity<ResponseBody<List<Ttesis>>> response=null;
 		List<Ttesis>ttesisList=null;
 		try{
-			ttesisList=ttesisService.findAll(page,size);
+			ttesisList=ttesisService.searchTesis(page,size,data);
 			response=Utils.<List<Ttesis>>response(HttpStatus.OK,"Lista encontrada",ttesisList);
 		}catch (Exception e){
 			response=Utils.<List<Ttesis>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesisList);

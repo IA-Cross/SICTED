@@ -1,11 +1,7 @@
 package com.integrador.sicdet.entity;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,8 +14,9 @@ public class TcorrectionDates implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	@Column(name = "id_tesis")
-	private Integer idTesis;
+	@ManyToOne
+	@JoinColumn(name = "id_tesis",referencedColumnName = "id")
+	private Ttesis idTesis;
 	@Column(name = "date")
 	private Date date;
 	@Column(name = "title")
@@ -45,12 +42,10 @@ public class TcorrectionDates implements Serializable{
 		  this.id=id;
 	}
 
-	public Integer getIdTesis(){
-		 return idTesis;
-	}
+	public Ttesis getIdTesis() { return idTesis; }
 
-	public void setIdTesis(Integer idTesis){
-		  this.idTesis=idTesis;
+	public void setIdTesis(Ttesis idTesis) {
+		this.idTesis = idTesis;
 	}
 
 	public Date getDate(){

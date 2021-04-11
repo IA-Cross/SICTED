@@ -9,7 +9,10 @@ import java.util.Date;
 @Entity
 @Table(name= "ttesis")
 @NamedQueries({
-		//@NamedQuery(name = "Ttesis.search",query = "select u from Ttesis u where u.status=1 and U.title=:title")
+		@NamedQuery(name = "Ttesis.findAllActive",query = "select u from Ttesis u where u.status=1"),
+		@NamedQuery(name = "Ttesis.searchTesis",query = "select u from Ttesis u where u.status=1 and u.idAsesor.id=:advisor and (u.title like :title) and u.isPublished=1 order by u.title"),
+		@NamedQuery(name = "Ttesis.findByIdActive",query = "select u from Ttesis u where u.status=1 and u.id=:id"),
+
 })
 public class Ttesis implements Serializable{ 
 
@@ -17,8 +20,9 @@ public class Ttesis implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	@Column(name = "id_asesor")
-	private Integer idAsesor;
+	@ManyToOne
+	@JoinColumn(name = "id_asesor",referencedColumnName = "id")
+	private Tasesor idAsesor;
 	@Column(name = "id_cat_degree")
 	private Integer idCatDegree;
 	@Column(name = "id_tcatalog")
@@ -54,13 +58,9 @@ public class Ttesis implements Serializable{
 		  this.id=id;
 	}
 
-	public Integer getIdAsesor(){
-		 return idAsesor;
-	}
+	public Tasesor getIdAsesor() { return idAsesor; }
 
-	public void setIdAsesor(Integer idAsesor){
-		  this.idAsesor=idAsesor;
-	}
+	public void setIdAsesor(Tasesor idAsesor) { this.idAsesor = idAsesor; }
 
 	public Integer getIdCatDegree(){
 		 return idCatDegree;

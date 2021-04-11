@@ -1,7 +1,10 @@
 package com.integrador.sicdet.service.impl;
 
+import com.integrador.sicdet.entity.Cspecialties;
 import com.integrador.sicdet.entity.Tasesor;
+import com.integrador.sicdet.entity.Tperson;
 import com.integrador.sicdet.repository.TasesorRepository;
+import com.integrador.sicdet.repository.TpersonRepository;
 import com.integrador.sicdet.service.TasesorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,8 @@ public class TasesorServiceImpl implements TasesorService{
 
 	@Autowired
 	private TasesorRepository tasesorRepository;
+	@Autowired
+	private TpersonRepository personRepo;
 
 	@Override
 	public void insert(Tasesor tasesor ) throws Exception{
@@ -44,13 +49,13 @@ public class TasesorServiceImpl implements TasesorService{
 			}
 			//idPerson
 			if(data.containsKey("idPerson")){
-				Integer idPerson = (Integer)data.get("idPerson");
-				tasesorOptional.get().setIdPerson(idPerson);
+				tasesorOptional.get().setIdPerson(new Tperson());
+				tasesorOptional.get().getIdPerson().setId(Integer.parseInt(data.get("idPerson").toString()));
 			}
 			//idSpecialties
 			if(data.containsKey("idSpecialties")){
-				Integer idSpecialties = (Integer)data.get("idSpecialties");
-				tasesorOptional.get().setIdSpecialties(idSpecialties);
+				tasesorOptional.get().setIdSpecialties(new Cspecialties());
+				tasesorOptional.get().getIdSpecialties().setId((Integer)data.get("idSpecialties"));
 			}
 			//status
 			if(data.containsKey("status")){

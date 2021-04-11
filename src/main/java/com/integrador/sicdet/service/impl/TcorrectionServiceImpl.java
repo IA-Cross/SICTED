@@ -1,6 +1,7 @@
 package com.integrador.sicdet.service.impl;
 
 import com.integrador.sicdet.entity.Tcorrection;
+import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.repository.TcorrectionRepository;
 import com.integrador.sicdet.service.TcorrectionService;
 import org.slf4j.Logger;
@@ -40,12 +41,13 @@ public class TcorrectionServiceImpl implements TcorrectionService{
 		try{
 			Optional<Tcorrection> tcorrectionOptional = tcorrectionRepository.findById(id);
 			if(!tcorrectionOptional.isPresent()){
-				throw new Exception("No existe el registro");
+				throw new Exception("No existe el registro"
+				);
 			}
 			//idTesis
 			if(data.containsKey("idTesis")){
-				Integer idTesis = (Integer)data.get("idTesis");
-				tcorrectionOptional.get().setIdTesis(idTesis);
+				tcorrectionOptional.get().setIdTesis(new Ttesis());
+				tcorrectionOptional.get().getIdTesis().setId((Integer)data.get("idTesis"));
 			}
 			//description
 			if(data.containsKey("description")){

@@ -1,6 +1,7 @@
 package com.integrador.sicdet.service.impl;
 
 import com.integrador.sicdet.entity.Tdownloadlog;
+import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.repository.TdownloadlogRepository;
 import com.integrador.sicdet.service.TdownloadlogService;
 import org.slf4j.Logger;
@@ -44,8 +45,8 @@ public class TdownloadlogServiceImpl implements TdownloadlogService{
 			}
 			//ttesisId
 			if(data.containsKey("ttesisId")){
-				Integer ttesisId = (Integer)data.get("ttesisId");
-				tdownloadlogOptional.get().setTtesisId(ttesisId);
+				tdownloadlogOptional.get().setTtesisId(new Ttesis());
+				tdownloadlogOptional.get().getTtesisId().setId((Integer)data.get("ttesisId"));
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){

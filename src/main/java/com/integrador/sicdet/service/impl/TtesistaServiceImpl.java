@@ -1,5 +1,7 @@
 package com.integrador.sicdet.service.impl;
 
+import com.integrador.sicdet.entity.Tperson;
+import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.entity.Ttesista;
 import com.integrador.sicdet.repository.TtesistaRepository;
 import com.integrador.sicdet.service.TtesistaService;
@@ -44,13 +46,13 @@ public class TtesistaServiceImpl implements TtesistaService{
 			}
 			//idPerson
 			if(data.containsKey("idPerson")){
-				Integer idPerson = (Integer)data.get("idPerson");
-				ttesistaOptional.get().setIdPerson(idPerson);
+				ttesistaOptional.get().setIdPerson(new Tperson());
+				ttesistaOptional.get().getIdPerson().setId((Integer)data.get("idPerson"));
 			}
 			//ttesisId
 			if(data.containsKey("ttesisId")){
-				Integer ttesisId = (Integer)data.get("ttesisId");
-				ttesistaOptional.get().setTtesisId(ttesisId);
+				ttesistaOptional.get().setTtesisId(new Ttesis());
+				ttesistaOptional.get().getTtesisId().setId((Integer)data.get("ttesisId"));
 			}
 			//enrollment
 			if(data.containsKey("enrollment")){

@@ -1,11 +1,7 @@
 package com.integrador.sicdet.entity;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,10 +14,12 @@ public class Tasesor implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	@Column(name = "id_person")
-	private Integer idPerson;
-	@Column(name = "id_specialties")
-	private Integer idSpecialties;
+	@ManyToOne
+	@JoinColumn(name = "id_person",referencedColumnName = "id")
+	private Tperson idPerson;
+	@ManyToOne
+	@JoinColumn(name = "id_specialties",referencedColumnName = "id")
+	private Cspecialties idSpecialties;
 	@Column(name = "status")
 	private Integer status;
 	@Column(name = "created_at")
@@ -41,21 +39,13 @@ public class Tasesor implements Serializable{
 		  this.id=id;
 	}
 
-	public Integer getIdPerson(){
-		 return idPerson;
-	}
+	public Tperson getIdPerson() { return idPerson; }
 
-	public void setIdPerson(Integer idPerson){
-		  this.idPerson=idPerson;
-	}
+	public void setIdPerson(Tperson idPerson) { this.idPerson = idPerson; }
 
-	public Integer getIdSpecialties(){
-		 return idSpecialties;
-	}
+	public Cspecialties getIdSpecialties() { return idSpecialties; }
 
-	public void setIdSpecialties(Integer idSpecialties){
-		  this.idSpecialties=idSpecialties;
-	}
+	public void setIdSpecialties(Cspecialties idSpecialties) { this.idSpecialties = idSpecialties; }
 
 	public Integer getStatus(){
 		 return status;

@@ -1,6 +1,7 @@
 package com.integrador.sicdet.service.impl;
 
 import com.integrador.sicdet.entity.Tprogress;
+import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.repository.TprogressRepository;
 import com.integrador.sicdet.service.TprogressService;
 import org.slf4j.Logger;
@@ -44,8 +45,8 @@ public class TprogressServiceImpl implements TprogressService{
 			}
 			//ttesisId
 			if(data.containsKey("ttesisId")){
-				Integer ttesisId = (Integer)data.get("ttesisId");
-				tprogressOptional.get().setTtesisId(ttesisId);
+				tprogressOptional.get().setTtesisId(new Ttesis());
+				tprogressOptional.get().getTtesisId().setId((Integer)data.get("ttesisId"));
 			}
 			//progress
 			if(data.containsKey("progress")){

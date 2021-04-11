@@ -1,27 +1,28 @@
 package com.integrador.sicdet.entity;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
 @Entity
 @Table(name= "ttesista")
+@NamedQueries({
+		@NamedQuery(name = "Ttesista.findByName",query = "select u from Ttesista u where u.status=1 and (u.idPerson.name like :author or u.idPerson.firstlastname like :author or u.idPerson.secondlastname like :author)")
+})
 public class Ttesista implements Serializable{ 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	@Column(name = "id_person")
-	private Integer idPerson;
-	@Column(name = "ttesis_id")
-	private Integer ttesisId;
+	@ManyToOne
+	@JoinColumn(name = "id_person",referencedColumnName = "id")
+	private Tperson idPerson;
+	@ManyToOne
+	@JoinColumn(name = "ttesis_id",referencedColumnName = "id")
+	private Ttesis ttesisId;
 	@Column(name = "enrollment")
 	private String enrollment;
 	@Column(name = "id_cat_degree")
@@ -49,21 +50,13 @@ public class Ttesista implements Serializable{
 		  this.id=id;
 	}
 
-	public Integer getIdPerson(){
-		 return idPerson;
-	}
+	public Tperson getIdPerson() { return idPerson; }
 
-	public void setIdPerson(Integer idPerson){
-		  this.idPerson=idPerson;
-	}
+	public void setIdPerson(Tperson idPerson) { this.idPerson = idPerson; }
 
-	public Integer getTtesisId(){
-		 return ttesisId;
-	}
+	public Ttesis getTtesisId() { return ttesisId; }
 
-	public void setTtesisId(Integer ttesisId){
-		  this.ttesisId=ttesisId;
-	}
+	public void setTtesisId(Ttesis ttesisId) { this.ttesisId = ttesisId; }
 
 	public String getEnrollment(){
 		 return enrollment;
