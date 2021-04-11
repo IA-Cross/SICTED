@@ -8,11 +8,11 @@ import java.util.List;
 
 @Repository
 public interface TuserroleRepository extends JpaRepository<Tuserrole,Integer>{
-    //List<Tuserrole> findAllByIdUser(Integer id);
+    List<Tuserrole> findAllByIdUser(Integer id);
     //Boolean existsByIdRol(Integer idRol);
     //boolean existsByIdUser(Integer id);
     //List<Tuserrole>findByIdRol(int id);
-    //Tuserrole findByIdUser(@Param("id") int id);
+    Tuserrole findByIdUser(@Param("id") int id);
     //List<Tuserrole>findAllUserByNames(@Param("names") String names);
     //Tuserrole findByIdActive(int id);
 }

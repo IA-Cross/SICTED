@@ -9,7 +9,8 @@ import java.util.Date;
 @Entity
 @Table(name= "tperson")
 @NamedQueries({
-		@NamedQuery(name = "Tperson.findPersonjTest",query = "select c from Tperson c where c.status=1")
+		@NamedQuery(name = "Tperson.findPersonjTest",query = "select c from Tperson c where c.status=1"),
+		@NamedQuery(name = "Tperson.findByIdActive", query = "select s from Tperson s where s.id = :id and s.status=1"),
 })
 public class Tperson implements Serializable{ 
 

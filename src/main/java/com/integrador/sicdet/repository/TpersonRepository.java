@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface TpersonRepository extends JpaRepository<Tperson,Integer>{
     List<Tperson> findPersonjTest();
+    Tperson findByIdActive(int id);
 }

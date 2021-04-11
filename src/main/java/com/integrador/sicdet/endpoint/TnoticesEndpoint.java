@@ -63,15 +63,16 @@ public class TnoticesEndpoint{
 	}
 
 	@GetMapping("/findAll")
-	public ResponseEntity<ResponseBody<List<Tnotices>>> findAll(@RequestParam("page") int page,@RequestParam("size") int size){
-		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
+	public ResponseEntity<ResponseBody<List<Tnotices>>> findAll(@RequestParam("start") int start,@RequestParam("limit") int limit){
+		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",start,limit);
 		ResponseEntity<ResponseBody<List<Tnotices>>> response=null;
 		List<Tnotices>tnoticesList=null;
 		try{
-			tnoticesList=tnoticesService.findAll(page,size);
+			tnoticesList=tnoticesService.findAll(start,limit);
+			System.out.println("Se ecncontro bien");
 			response=Utils.<List<Tnotices>>response(HttpStatus.OK,"Lista encontrada",tnoticesList);
 		}catch (Exception e){
-			response=Utils.<List<Tnotices>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tnoticesList);
+			response=Utils.<List<Tnotices>>response(HttpStatus.NOT_FOUND,"Lista no encontrada",tnoticesList);
 		}
 		return response;
 	}

@@ -1,25 +1,29 @@
 package com.integrador.sicdet.entity;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
 @Entity
 @Table(name= "tuserrole")
+@NamedQueries({
+		@NamedQuery(name="Tuserrole.findByIdUser",query="select r from Tuserrole r where r.status=1 and r.iduser.id=:id"),
+		@NamedQuery(name = "Tuserrole.findAllByIdUser", query = "select r from Tuserrole r where r.iduser.id = :id and r.status=1"),
+})
 public class Tuserrole implements Serializable{ 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	private Integer iduser;
-	private Integer idrol;
+	@ManyToOne
+	@JoinColumn(name = "iduser",referencedColumnName = "id")
+	private Tuser iduser;
+	@ManyToOne
+	@JoinColumn(name = "idrol",referencedColumnName = "id")
+	private Crole idrol;
 	@Column(name = "status")
 	private Integer status;
 	@Column(name = "created_at")
@@ -39,21 +43,13 @@ public class Tuserrole implements Serializable{
 		  this.id=id;
 	}
 
-	public Integer getIduser(){
-		 return iduser;
-	}
+	public Tuser getIduser() { return iduser; }
 
-	public void setIduser(Integer iduser){
-		  this.iduser=iduser;
-	}
+	public void setIduser(Tuser iduser) { this.iduser = iduser; }
 
-	public Integer getIdrol(){
-		 return idrol;
-	}
+	public Crole getIdrol() { return idrol; }
 
-	public void setIdrol(Integer idrol){
-		  this.idrol=idrol;
-	}
+	public void setIdrol(Crole idrol) { this.idrol = idrol; }
 
 	public Integer getStatus(){
 		 return status;

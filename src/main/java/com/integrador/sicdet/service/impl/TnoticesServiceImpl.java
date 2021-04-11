@@ -7,12 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
-import java.util.Date;
 
 @Service
 public class TnoticesServiceImpl implements TnoticesService{
@@ -103,18 +102,21 @@ public class TnoticesServiceImpl implements TnoticesService{
 		}
 	}
 	@Override
-	public List<Tnotices> findAll(int page,int size) throws Exception{
-		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
+	public List<Tnotices> findAll(int start,int limit) throws Exception{
+		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",start,limit);
 		List<Tnotices>tnoticesList=null;
+		List<Tnotices>responseList=new ArrayList<>();
 		try{
-			Pageable pageable= PageRequest.of(page,size);
-			tnoticesList = tnoticesRepository.findAll(pageable).toList();
+			tnoticesList = tnoticesRepository.findAllActive();
+			for (int i=start; i<tnoticesList.size()&&responseList.size()<limit;i++){
+				responseList.add(tnoticesList.get(i));
+			}
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
 		}
-		LOGGER.debug(">>>> findAll <<<< tnoticesList: {}",tnoticesList);
-		return tnoticesList;
+		LOGGER.debug(">>>> findAll <<<< tnoticesList: {}",responseList);
+		return responseList;
 	}
 
 }

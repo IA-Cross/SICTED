@@ -1,5 +1,7 @@
 package com.integrador.sicdet.service.impl;
 
+import com.integrador.sicdet.entity.Crole;
+import com.integrador.sicdet.entity.Tuser;
 import com.integrador.sicdet.entity.Tuserrole;
 import com.integrador.sicdet.repository.TuserroleRepository;
 import com.integrador.sicdet.service.TuserroleService;
@@ -44,13 +46,14 @@ public class TuserroleServiceImpl implements TuserroleService{
 			}
 			//iduser
 			if(data.containsKey("iduser")){
-				Integer iduser = (Integer)data.get("iduser");
-				tuserroleOptional.get().setIduser(iduser);
+				tuserroleOptional.get().setIduser(new Tuser());
+				tuserroleOptional.get().getIduser().setId((Integer)data.get("iduser"));
 			}
 			//idrol
 			if(data.containsKey("idrol")){
 				Integer idrol = (Integer)data.get("idrol");
-				tuserroleOptional.get().setIdrol(idrol);
+				tuserroleOptional.get().setIdrol(new Crole());
+				tuserroleOptional.get().getIdrol().setId((Integer)data.get("idrol"));
 			}
 			//status
 			if(data.containsKey("status")){

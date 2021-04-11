@@ -1,5 +1,6 @@
 package com.integrador.sicdet.service.impl;
 
+import com.integrador.sicdet.entity.Tperson;
 import com.integrador.sicdet.entity.Tuser;
 import com.integrador.sicdet.repository.TuserRepository;
 import com.integrador.sicdet.service.TuserService;
@@ -44,8 +45,8 @@ public class TuserServiceImpl implements TuserService{
 			}
 			//idperson
 			if(data.containsKey("idperson")){
-				Integer idperson = (Integer)data.get("idperson");
-				tuserOptional.get().setIdperson(idperson);
+				tuserOptional.get().setIdperson(new Tperson());
+				tuserOptional.get().getIdperson().setId((Integer)data.get("idperson"));
 			}
 			//email
 			if(data.containsKey("email")){

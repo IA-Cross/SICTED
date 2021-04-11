@@ -9,7 +9,8 @@ import java.util.Date;
 @Entity
 @Table(name= "ttesista")
 @NamedQueries({
-		@NamedQuery(name = "Ttesista.findByName",query = "select u from Ttesista u where u.status=1 and (u.idPerson.name like :author or u.idPerson.firstlastname like :author or u.idPerson.secondlastname like :author)")
+		@NamedQuery(name = "Ttesista.findByName",query = "select u from Ttesista u where u.status=1 and (u.idPerson.name like :author or u.idPerson.firstlastname like :author or u.idPerson.secondlastname like :author)"),
+		@NamedQuery(name = "Ttesista.findByIdPerson",query = "select u from Ttesista u where u.status=1 and u.idPerson.id=:id")
 })
 public class Ttesista implements Serializable{ 
 

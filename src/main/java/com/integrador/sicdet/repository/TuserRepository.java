@@ -7,5 +7,6 @@ import java.util.List;
 
 @Repository
 public interface TuserRepository extends JpaRepository<Tuser,Integer>{
-
+    boolean existsByEmail(String email);
+    Tuser findByEmail(String email);
 }
