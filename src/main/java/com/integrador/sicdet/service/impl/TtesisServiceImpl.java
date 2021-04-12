@@ -183,11 +183,9 @@ public class TtesisServiceImpl implements TtesisService{
 			if(existAdvisor && existTitle)
 			ttesisList=ttesisRepository.searchTesis('%'+title+'%',advisor);
 			else if(existAdvisor){
-				System.out.println("Se ejecuta por advisor");
 				ttesisList=ttesisRepository.findByAdvisor(advisor);
 			}
 			else if(existTitle) {
-				System.out.println("Se ejecuta por titulo");
 				ttesisList = ttesisRepository.findByTitle(title);
 			}
 
