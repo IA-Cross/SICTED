@@ -1,5 +1,6 @@
 package com.integrador.sicdet.endpoint;
 
+import com.integrador.sicdet.entity.TesisCardFormat;
 import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.service.TtesisService;
 import com.integrador.sicdet.config.ResponseBody;
@@ -87,6 +88,20 @@ public class TtesisEndpoint{
 			response=Utils.<List<Ttesis>>response(HttpStatus.OK,"Lista encontrada",ttesisList);
 		}catch (Exception e){
 			response=Utils.<List<Ttesis>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesisList);
+		}
+		return response;
+	}
+
+	@GetMapping("/findAllCardFormat")
+	public ResponseEntity<ResponseBody<List<TesisCardFormat>>> findAllCardFormat(){
+		LOGGER.debug(">>>> findAll <<<<");
+		ResponseEntity<ResponseBody<List<TesisCardFormat>>> response=null;
+		List<TesisCardFormat>ttesisList=null;
+		try{
+			ttesisList=ttesisService.findAllCardFormat();
+			response=Utils.<List<TesisCardFormat>>response(HttpStatus.OK,"Lista encontrada",ttesisList);
+		}catch (Exception e){
+			response=Utils.<List<TesisCardFormat>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesisList);
 		}
 		return response;
 	}

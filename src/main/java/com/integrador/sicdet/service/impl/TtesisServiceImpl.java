@@ -1,8 +1,6 @@
 package com.integrador.sicdet.service.impl;
 
-import com.integrador.sicdet.entity.Tasesor;
-import com.integrador.sicdet.entity.Ttesis;
-import com.integrador.sicdet.entity.Ttesista;
+import com.integrador.sicdet.entity.*;
 import com.integrador.sicdet.repository.TtesisRepository;
 import com.integrador.sicdet.repository.TtesistaRepository;
 import com.integrador.sicdet.service.TtesisService;
@@ -214,5 +212,35 @@ public class TtesisServiceImpl implements TtesisService{
 		LOGGER.info("Resultados: {}",ttesisListFinal);
 		return ttesisListFinal;
 	}
+
+	@Override
+	public List<TesisCardFormat> findAllCardFormat() throws Exception {
+		LOGGER.debug(">>>> findAll <<<<");
+		List<Ttesis>ttesisList=null;
+		List<TesisCardFormat> cards= new ArrayList<>();
+		List<TesisCardFormat> cardsRes= new ArrayList<>();
+		Ttesista findedTesist = new Ttesista();
+		String name="";
+		try{
+			ttesisList = ttesisRepository.findAllActive();
+			for (Ttesis tesis : ttesisList) {
+				findedTesist= tesistaRepo.findByIdTesis(tesis.getId());
+				name = findedTesist.getIdPerson().getName()+" "+findedTesist.getIdPerson().getFirstlastname()+" "+findedTesist.getIdPerson().getSecondlastname();
+				TesisCardFormat card = TesisCardBuilder.fromTesis(tesis, name);
+				cards.add(card);
+			}
+
+			for (int i=0; i<cards.size()&&cardsRes.size()<3;i++){
+				cardsRes.add(cards.get(i));
+			}
+
+		}catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+		LOGGER.debug(">>>> findAll <<<< ttesisList: {}",ttesisList);
+		return cardsRes;
+	}
+
 
 }

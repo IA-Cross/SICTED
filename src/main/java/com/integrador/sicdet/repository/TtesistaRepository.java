@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface TtesistaRepository extends JpaRepository<Ttesista,Integer>{
     Ttesista findByName(@Param("name") String name);
     Ttesista findByIdPerson(@Param("id") int id);
+    Ttesista findByIdTesis(@Param("id") int id);
 }
