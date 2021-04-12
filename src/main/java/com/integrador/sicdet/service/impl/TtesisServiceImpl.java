@@ -220,13 +220,14 @@ public class TtesisServiceImpl implements TtesisService{
 		List<TesisCardFormat> cards= new ArrayList<>();
 		List<TesisCardFormat> cardsRes= new ArrayList<>();
 		Ttesista findedTesist = new Ttesista();
+		TesisCardFormat card = null;
 		String name="";
 		try{
 			ttesisList = ttesisRepository.findAllActive();
 			for (Ttesis tesis : ttesisList) {
 				findedTesist= tesistaRepo.findByIdTesis(tesis.getId());
 				name = findedTesist.getIdPerson().getName()+" "+findedTesist.getIdPerson().getFirstlastname()+" "+findedTesist.getIdPerson().getSecondlastname();
-				TesisCardFormat card = TesisCardBuilder.fromTesis(tesis, name);
+				card = TesisCardBuilder.fromTesis(tesis, name);
 				cards.add(card);
 			}
 
