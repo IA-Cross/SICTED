@@ -76,7 +76,7 @@ public class TtesisEndpoint{
 		return response;
 	}
 
-	@GetMapping("/searchTesis")
+	@PostMapping("/searchTesis")
 	public ResponseEntity<ResponseBody<List<Ttesis>>>searchTesis(@RequestParam("page") int page,@RequestParam("size") int size, @RequestBody Map<String,Object> data){
 		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
 

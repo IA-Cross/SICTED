@@ -167,9 +167,9 @@ public class TtesisServiceImpl implements TtesisService{
 				int advisor = Integer.parseInt(data.get("advisor").toString());
 				String author = data.get("author").toString();
 			//Se busca por titulo y asesor
-			ttesisList=ttesisRepository.searchTesis(title,advisor);
+			ttesisList=ttesisRepository.searchTesis(title,'%'+advisor+'%');
 			//Se busca por autor
-			tesista= tesistaRepo.findByName(author);
+			tesista= tesistaRepo.findByName('%'+author+'%');
 			if (tesista!=null){
 				ttesisList2=ttesisRepository.findByIdActive(tesista.getId());
 				boolean tesisEquals=false;
@@ -196,6 +196,7 @@ public class TtesisServiceImpl implements TtesisService{
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
 		}
+		LOGGER.info("Resultados: {}",ttesisListFinal);
 		return ttesisListFinal;
 	}
 
