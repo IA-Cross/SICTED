@@ -45,12 +45,11 @@ public class LoginServiceImpl implements LoginService {
         Date localDT = java.sql.Timestamp.valueOf(LocalDateTime.now());
         try {
             if(data.isEmpty() || (!data.containsKey("email") || !data.containsKey("password"))
-                    || (data.get("email") == null && data.get("password") == null || data.get("token-type") == null)
-                    || (!data.get("token-type").equals("1"))) {
+                    || (data.get("email") == null && data.get("password") == null )) {
                 LOG.info("!400	Invalid input");
                 throw new AppException400BadRequest("Invalid input");
             }
-            if(userRepo.existsByEmail(data.get("identifier"))) {
+            if(userRepo.existsByEmail(data.get("email"))) {
                 user = userRepo.findByEmail(data.get("email"));
             }else {
                 LOG.info("!401	Ivalid email");
@@ -151,6 +150,7 @@ public class LoginServiceImpl implements LoginService {
             tokenResponseBody.setClaveHash(hashC);
             tokenResponseBody.setEmail(user.getEmail());
             tokenResponseBody.setPerson(person);
+            tokenResponseBody.setToken(token);
 
             user.setToken(token);
             userRepo.save(user);
