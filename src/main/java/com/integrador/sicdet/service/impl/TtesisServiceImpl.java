@@ -159,42 +159,49 @@ public class TtesisServiceImpl implements TtesisService{
 	@Override
 	public List<Ttesis> searchTesis(int start, int limit, Map<String, Object> data) throws Exception {
 		LOGGER.debug(">>>> update->id: {}, ttesis: {}",data);
-		List<Ttesis>ttesisList=null;
-		List<Ttesis>ttesisList2=null;
+		List<Ttesis>ttesisList=new ArrayList<>();
+		List<Ttesis>ttesisList2=new ArrayList<>();
 		List<Ttesis>ttesisListFinal=new ArrayList<>();
 		Ttesista tesista = null;
 		try{
 				String title =null;
 				int advisor=0;
-				title = data.get("title").toString();
-				advisor = Integer.parseInt(data.get("advisor").toString());
 				String author=null;
-				 author= data.get("author").toString();
 				 boolean existTitle=false;
 				boolean existAdvisor=false;
 				boolean existAuthor=false;
-			if((advisor==0||data.get("advisor").toString().equals("undefined"))){
+			if((!data.get("advisor").toString().equals("")||data.get("advisor").toString().equals("undefined"))){
 				existAdvisor=true;
+				advisor = Integer.parseInt(data.get("advisor").toString());
 			}
 			if((!data.get("title").toString().equals("")||data.get("title").toString().equals("undefined"))){
 				existTitle=true;
+				title = data.get("title").toString();
+			}
+			if((!data.get("author").toString().equals("")||data.get("author").toString().equals("undefined"))){
+				existAuthor=true;
+				author= data.get("author").toString();
 			}
 			//Se busca por titulo y asesor
-			if(existAdvisor && existTitle)
-			ttesisList=ttesisRepository.searchTesis('%'+title+'%',advisor);
+			if(existAdvisor && existTitle) {
+				ttesisList = ttesisRepository.searchTesis('%' + title + '%', advisor);
+			}
 			else if(existAdvisor){
 				ttesisList=ttesisRepository.findByAdvisor(advisor);
 			}
 			else if(existTitle) {
 				ttesisList = ttesisRepository.findByTitle(title);
 			}
-
-			if(!author.equals("")||author.equals("undefined")&&(data.get("advisor").toString().equals("")||!data.get("advisor").toString().equals("undefined"))) {
+			if(existAuthor) {
 				//Se busca por autor
 				tesista = tesistaRepo.findByName('%' + author + '%');
 				Ttesis tesistaTesis = tesista.getTtesisId();
-				ttesisList2 = ttesisList.stream().filter(t -> t.getTitle().equals(tesistaTesis.getTitle())).collect(Collectors.toList());
-				ttesisList=ttesisList2;
+				if(existAuthor && !existAdvisor && !existTitle){
+					ttesisList.add(tesistaTesis);
+				}else {
+					ttesisList2 = ttesisList.stream().filter(t -> t.getTitle().equals(tesistaTesis.getTitle())).collect(Collectors.toList());
+					ttesisList = ttesisList2;
+				}
 			}
 
 			for (int i=start; i<ttesisList.size()&&ttesisListFinal.size()<limit;i++){
@@ -205,7 +212,7 @@ public class TtesisServiceImpl implements TtesisService{
 			throw new Exception(e);
 		}
 		LOGGER.info("Resultados: {}",ttesisListFinal);
-		return ttesisList;
+		return ttesisListFinal;
 	}
 
 }
