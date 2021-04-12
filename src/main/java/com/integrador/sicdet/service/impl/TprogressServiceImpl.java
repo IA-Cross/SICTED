@@ -98,11 +98,15 @@ public class TprogressServiceImpl implements TprogressService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tprogress> tprogressOptional = tprogressRepository.findById(id);
-			if(!tprogressOptional.isPresent()){
+			Tprogress tprogressOptional = tprogressRepository.findById(id).get();
+			if(tprogressOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tprogressRepository.delete(tprogressOptional.get());
+			if(tprogressOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tprogressOptional.setStatus(0);
+			tprogressRepository.save(tprogressOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

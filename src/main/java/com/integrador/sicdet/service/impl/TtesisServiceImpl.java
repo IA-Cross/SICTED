@@ -127,11 +127,15 @@ public class TtesisServiceImpl implements TtesisService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Ttesis> ttesisOptional = ttesisRepository.findById(id);
-			if(!ttesisOptional.isPresent()){
+			Ttesis ttesisOptional = ttesisRepository.findById(id).get();
+			if(ttesisOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			ttesisRepository.delete(ttesisOptional.get());
+			if(ttesisOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			ttesisOptional.setStatus(0);
+			ttesisRepository.save(ttesisOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

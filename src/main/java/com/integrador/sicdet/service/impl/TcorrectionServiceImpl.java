@@ -98,11 +98,15 @@ public class TcorrectionServiceImpl implements TcorrectionService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tcorrection> tcorrectionOptional = tcorrectionRepository.findById(id);
-			if(!tcorrectionOptional.isPresent()){
+			Tcorrection tcorrectionOptional = tcorrectionRepository.findById(id).get();
+			if(tcorrectionOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tcorrectionRepository.delete(tcorrectionOptional.get());
+			if(tcorrectionOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tcorrectionOptional.setStatus(0);
+			tcorrectionRepository.save(tcorrectionOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

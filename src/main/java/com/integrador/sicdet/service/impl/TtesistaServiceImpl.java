@@ -109,11 +109,15 @@ public class TtesistaServiceImpl implements TtesistaService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Ttesista> ttesistaOptional = ttesistaRepository.findById(id);
-			if(!ttesistaOptional.isPresent()){
+			Ttesista ttesistaOptional = ttesistaRepository.findById(id).get();
+			if(ttesistaOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			ttesistaRepository.delete(ttesistaOptional.get());
+			if(ttesistaOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			ttesistaOptional.setStatus(0);
+			ttesistaRepository.save(ttesistaOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

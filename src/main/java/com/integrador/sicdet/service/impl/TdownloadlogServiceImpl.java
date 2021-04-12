@@ -64,20 +64,7 @@ public class TdownloadlogServiceImpl implements TdownloadlogService{
 			throw new Exception(e);
 		}
 	}
-	@Override
-	public void delete(Integer id) throws Exception{
-		LOGGER.debug(">>>> delete->id: {}",id);
-		try{
-			Optional<Tdownloadlog> tdownloadlogOptional = tdownloadlogRepository.findById(id);
-			if(!tdownloadlogOptional.isPresent()){
-				throw new Exception("No existe el registro");
-			}
-			tdownloadlogRepository.delete(tdownloadlogOptional.get());
-		}catch (Exception e){
-			LOGGER.error("Exception: {}",e);
-			throw new Exception(e);
-		}
-	}
+	
 	@Override
 	public List<Tdownloadlog> findAll(int page,int size) throws Exception{
 		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);

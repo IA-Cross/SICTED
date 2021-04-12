@@ -90,11 +90,15 @@ public class TuserroleServiceImpl implements TuserroleService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tuserrole> tuserroleOptional = tuserroleRepository.findById(id);
-			if(!tuserroleOptional.isPresent()){
+			Tuserrole tuserroleOptional = tuserroleRepository.findById(id).get();
+			if(tuserroleOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tuserroleRepository.delete(tuserroleOptional.get());
+			if(tuserroleOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tuserroleOptional.setStatus(0);
+			tuserroleRepository.save(tuserroleOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

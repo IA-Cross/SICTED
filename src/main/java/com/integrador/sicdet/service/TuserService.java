@@ -7,4 +7,5 @@ public interface TuserService{
 	void update(Integer id, Map<String,Object> data) throws Exception;
 	void delete(Integer id) throws Exception;
 	List<Tuser> findAll(int page,int size) throws Exception;
+	Tuser findUserById(int id) throws Exception;
 }

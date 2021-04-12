@@ -9,4 +9,5 @@ import java.util.List;
 public interface TuserRepository extends JpaRepository<Tuser,Integer>{
     boolean existsByEmail(String email);
     Tuser findByEmail(String email);
+    Tuser findUserById(int id);
 }

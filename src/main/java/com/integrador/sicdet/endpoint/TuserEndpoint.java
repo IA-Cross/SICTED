@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.List;
+
 @RestController
 @RequestMapping("/tuser")
 public class TuserEndpoint{
@@ -36,8 +37,8 @@ public class TuserEndpoint{
 	return response;
 	}
 
-	@PostMapping("/update/{id}")
-	public ResponseEntity<ResponseBody<Void>> update(@PathVariable Integer id, @RequestBody Map<String,Object> data){
+	@PostMapping("/update")
+	public ResponseEntity<ResponseBody<Void>> update(@RequestParam("id") int id, @RequestBody Map<String,Object> data){
 		LOGGER.debug(">>>> update->id: {}, tuser: {}",id,data);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -49,8 +50,8 @@ public class TuserEndpoint{
 	return response;
 	}
 
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<ResponseBody<Void>> delete(@PathVariable Integer id){
+	@GetMapping("/delete")
+	public ResponseEntity<ResponseBody<Void>> delete(@RequestParam("id") int id){
 		LOGGER.debug(">>>> delete->id: {}",id);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -72,6 +73,20 @@ public class TuserEndpoint{
 			response=Utils.<List<Tuser>>response(HttpStatus.OK,"Lista encontrada",tuserList);
 		}catch (Exception e){
 			response=Utils.<List<Tuser>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tuserList);
+		}
+		return response;
+	}
+	
+	@GetMapping("/findUserById")
+	public ResponseEntity<ResponseBody<Tuser>> findUserById(@RequestParam("id") int id){
+		LOGGER.debug(">>>>> findUserById <<<<<<<< id: {}", id);
+		Tuser user = null;
+		ResponseEntity<ResponseBody<Tuser>> response = null;
+		try {
+			user = tuserService.findUserById(id);
+			response = Utils.<Tuser>response(HttpStatus.OK,"Usuario encontrado",user);
+		} catch (Exception e) {
+			response = Utils.<Tuser>response(HttpStatus.NOT_FOUND,"Usuario no encontrado", user);
 		}
 		return response;
 	}

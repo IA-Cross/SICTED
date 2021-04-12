@@ -92,11 +92,15 @@ public class TasesorServiceImpl implements TasesorService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tasesor> tasesorOptional = tasesorRepository.findById(id);
-			if(!tasesorOptional.isPresent()){
+			Tasesor tasesorOptional = tasesorRepository.findById(id).get();
+			if(tasesorOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tasesorRepository.delete(tasesorOptional.get());
+			if(tasesorOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tasesorOptional.setStatus(0);
+			tasesorRepository.save(tasesorOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

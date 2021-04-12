@@ -102,11 +102,14 @@ public class TpersonServiceImpl implements TpersonService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tperson> tpersonOptional = tpersonRepository.findById(id);
-			if(!tpersonOptional.isPresent()){
+			Tperson tpersonOptional = tpersonRepository.findById(id).get();
+			if(tpersonOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tpersonRepository.delete(tpersonOptional.get());
+			if(tpersonOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tpersonRepository.save(tpersonOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

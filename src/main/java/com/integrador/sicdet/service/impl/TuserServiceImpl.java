@@ -93,11 +93,15 @@ public class TuserServiceImpl implements TuserService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tuser> tuserOptional = tuserRepository.findById(id);
-			if(!tuserOptional.isPresent()){
+			Tuser tuserOptional = tuserRepository.findById(id).get();
+			if(tuserOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tuserRepository.delete(tuserOptional.get());
+			if(tuserOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tuserOptional.setStatus(0);
+			tuserRepository.save(tuserOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -116,6 +120,18 @@ public class TuserServiceImpl implements TuserService{
 		}
 		LOGGER.debug(">>>> findAll <<<< tuserList: {}",tuserList);
 		return tuserList;
+	}
+	
+	@Override
+	public Tuser findUserById(int id) throws Exception {
+		Tuser res = new Tuser();
+		try {
+			res = tuserRepository.findUserById(id);
+		} catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+		return res;		
 	}
 
 }

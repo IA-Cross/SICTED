@@ -98,11 +98,15 @@ public class TcorrectionDatesServiceImpl implements TcorrectionDatesService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<TcorrectionDates> tcorrectionDatesOptional = tcorrectionDatesRepository.findById(id);
-			if(!tcorrectionDatesOptional.isPresent()){
+			TcorrectionDates tcorrectionDatesOptional = tcorrectionDatesRepository.findById(id).get();
+			if(tcorrectionDatesOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tcorrectionDatesRepository.delete(tcorrectionDatesOptional.get());
+			if(tcorrectionDatesOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tcorrectionDatesOptional.setStatus(0);
+			tcorrectionDatesRepository.save(tcorrectionDatesOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

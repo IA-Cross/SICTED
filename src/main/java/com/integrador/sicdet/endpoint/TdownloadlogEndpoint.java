@@ -49,19 +49,6 @@ public class TdownloadlogEndpoint{
 	return response;
 	}
 
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<ResponseBody<Void>> delete(@PathVariable Integer id){
-		LOGGER.debug(">>>> delete->id: {}",id);
-		ResponseEntity<ResponseBody<Void>> response=null;
-		try{
-			tdownloadlogService.delete(id);
-			response= Utils.<Void>response(HttpStatus.OK,"Se elimino el registro",null);
-		}catch (Exception e){
-			response=Utils.<Void>response(HttpStatus.BAD_REQUEST,false,"No se puedo eliminar el registro",null);
-		}
-	return response;
-	}
-
 	@GetMapping("/findAll")
 	public ResponseEntity<ResponseBody<List<Tdownloadlog>>> findAll(@RequestParam("page") int page,@RequestParam("size") int size){
 		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);

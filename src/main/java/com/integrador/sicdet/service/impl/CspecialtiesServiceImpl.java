@@ -82,11 +82,15 @@ public class CspecialtiesServiceImpl implements CspecialtiesService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Cspecialties> cspecialtiesOptional = cspecialtiesRepository.findById(id);
-			if(!cspecialtiesOptional.isPresent()){
+			Cspecialties cspecialtiesOptional = cspecialtiesRepository.findById(id).get();
+			if(cspecialtiesOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			cspecialtiesRepository.delete(cspecialtiesOptional.get());
+			if(cspecialtiesOptional.getStatus() == 0){
+				throw new Exception("No se encuentra el registro");
+			}
+			cspecialtiesOptional.setStatus(0);
+			cspecialtiesRepository.save(cspecialtiesOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

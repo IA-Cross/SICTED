@@ -92,11 +92,15 @@ public class TcatalogServiceImpl implements TcatalogService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tcatalog> tcatalogOptional = tcatalogRepository.findById(id);
-			if(!tcatalogOptional.isPresent()){
+			Tcatalog tcatalogOptional = tcatalogRepository.findById(id).get();
+			if(tcatalogOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tcatalogRepository.delete(tcatalogOptional.get());
+			if(tcatalogOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tcatalogOptional.setStatus(0);
+			tcatalogRepository.save(tcatalogOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

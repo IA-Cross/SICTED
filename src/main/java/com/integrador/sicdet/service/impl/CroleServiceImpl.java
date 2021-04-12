@@ -87,11 +87,15 @@ public class CroleServiceImpl implements CroleService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Crole> croleOptional = croleRepository.findById(id);
-			if(!croleOptional.isPresent()){
+			Crole croleOptional = croleRepository.findById(id).get();
+			if(croleOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			croleRepository.delete(croleOptional.get());
+			if(croleOptional.getStatus() == 0){
+				throw new Exception("No se encuentra el registro");
+			}
+			croleOptional.setStatus(0);
+			croleRepository.save(croleOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

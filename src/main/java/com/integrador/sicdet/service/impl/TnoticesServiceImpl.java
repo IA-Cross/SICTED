@@ -91,11 +91,15 @@ public class TnoticesServiceImpl implements TnoticesService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tnotices> tnoticesOptional = tnoticesRepository.findById(id);
-			if(!tnoticesOptional.isPresent()){
+			Tnotices tnoticesOptional = tnoticesRepository.findById(id).get();
+			if(tnoticesOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tnoticesRepository.delete(tnoticesOptional.get());
+			if(tnoticesOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tnoticesOptional.setStatus(0);
+			tnoticesRepository.save(tnoticesOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
