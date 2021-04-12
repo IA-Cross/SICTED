@@ -12,6 +12,8 @@ import java.util.Date;
 		@NamedQuery(name = "Ttesis.findAllActive",query = "select u from Ttesis u where u.status=1"),
 		@NamedQuery(name = "Ttesis.searchTesis",query = "select u from Ttesis u where u.status=1 and u.idAsesor.id=:advisor and (u.title like :title) and u.isPublished=1 order by u.title"),
 		@NamedQuery(name = "Ttesis.findByIdActive",query = "select u from Ttesis u where u.status=1 and u.id=:id"),
+		@NamedQuery(name = "Ttesis.findByAdvisor",query = "select u from Ttesis u where u.status=1 and u.idAsesor.id=:id and u.isPublished=1 order by u.title"),
+		@NamedQuery(name = "Ttesis.findByTitle",query = "select u from Ttesis u where u.status=1 and (u.title like :title) and u.isPublished=1 order by u.title"),
 
 })
 public class Ttesis implements Serializable{ 

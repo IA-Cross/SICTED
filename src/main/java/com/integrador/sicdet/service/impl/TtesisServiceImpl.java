@@ -10,12 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
-import java.util.Date;
+
+import java.util.stream.Collectors;
 
 @Service
 public class TtesisServiceImpl implements TtesisService{
@@ -160,35 +161,44 @@ public class TtesisServiceImpl implements TtesisService{
 		LOGGER.debug(">>>> update->id: {}, ttesis: {}",data);
 		List<Ttesis>ttesisList=null;
 		List<Ttesis>ttesisList2=null;
-		List<Ttesis>ttesisListFinal=null;
+		List<Ttesis>ttesisListFinal=new ArrayList<>();
 		Ttesista tesista = null;
 		try{
-				String title = data.get("title").toString();
-				int advisor = Integer.parseInt(data.get("advisor").toString());
-				String author = data.get("author").toString();
-			//Se busca por titulo y asesor
-			ttesisList=ttesisRepository.searchTesis(title,'%'+advisor+'%');
-			//Se busca por autor
-			tesista= tesistaRepo.findByName('%'+author+'%');
-			if (tesista!=null){
-				ttesisList2=ttesisRepository.findByIdActive(tesista.getId());
-				boolean tesisEquals=false;
-				//Se verifica que no sean iguales para poder unir las 2 listas
-				for (int i=start; i<ttesisList2.size();i++) {
-					ttesisList.addAll(ttesisList2);
-					for (Ttesis ttesis : ttesisList) {
-						if (ttesisList2.get(i).getTitle().equals(ttesis.getTitle())) {
-							tesisEquals = true;
-							break;
-						}
-					}
-					//Si la bandera de igual no se activa, se agrega a la lista
-					if(!tesisEquals)
-						ttesisList.add(ttesisList2.get(i));
-					else
-						tesisEquals=false;
-				}
+				String title =null;
+				int advisor=0;
+				title = data.get("title").toString();
+				advisor = Integer.parseInt(data.get("advisor").toString());
+				String author=null;
+				 author= data.get("author").toString();
+				 boolean existTitle=false;
+				boolean existAdvisor=false;
+				boolean existAuthor=false;
+			if((advisor==0||data.get("advisor").toString().equals("undefined"))){
+				existAdvisor=true;
 			}
+			if((!data.get("title").toString().equals("")||data.get("title").toString().equals("undefined"))){
+				existTitle=true;
+			}
+			//Se busca por titulo y asesor
+			if(existAdvisor && existTitle)
+			ttesisList=ttesisRepository.searchTesis('%'+title+'%',advisor);
+			else if(existAdvisor){
+				System.out.println("Se ejecuta por advisor");
+				ttesisList=ttesisRepository.findByAdvisor(advisor);
+			}
+			else if(existTitle) {
+				System.out.println("Se ejecuta por titulo");
+				ttesisList = ttesisRepository.findByTitle(title);
+			}
+
+			if(!author.equals("")||author.equals("undefined")&&(data.get("advisor").toString().equals("")||!data.get("advisor").toString().equals("undefined"))) {
+				//Se busca por autor
+				tesista = tesistaRepo.findByName('%' + author + '%');
+				Ttesis tesistaTesis = tesista.getTtesisId();
+				ttesisList2 = ttesisList.stream().filter(t -> t.getTitle().equals(tesistaTesis.getTitle())).collect(Collectors.toList());
+				ttesisList=ttesisList2;
+			}
+
 			for (int i=start; i<ttesisList.size()&&ttesisListFinal.size()<limit;i++){
 				ttesisListFinal.add(ttesisList.get(i));
 			}
@@ -197,7 +207,7 @@ public class TtesisServiceImpl implements TtesisService{
 			throw new Exception(e);
 		}
 		LOGGER.info("Resultados: {}",ttesisListFinal);
-		return ttesisListFinal;
+		return ttesisList;
 	}
 
 }
