@@ -18,7 +18,14 @@ public class SecurityModule implements HandlerInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityModule.class);
 
     @Autowired
+    private CorsConfiguration corsConfiguration;
+    @Autowired
     private TurlRepository urlRepo;
+
+    @Bean
+    CorsConfiguration corsFilter() {
+        return corsConfiguration;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
