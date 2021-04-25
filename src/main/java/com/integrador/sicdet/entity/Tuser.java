@@ -9,7 +9,8 @@ import java.util.Date;
 @Entity
 @Table(name= "tuser")
 @NamedQueries({
-		@NamedQuery(name = "Tuser.findByUrl",query = "select u from Tuser u where u.status=1 and u.email=:email")
+		@NamedQuery(name = "Tuser.findByEmail",query = "select u from Tuser u where u.status=1 and u.email=:email"),
+		//@NamedQuery(name="Tuser.findByEmail",query = "select u from Tuser u where u.status=1 and u.email=:email")
 })
 public class Tuser implements Serializable{ 
 
