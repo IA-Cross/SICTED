@@ -16,7 +16,7 @@ public class TuserWithRolesFormat {
     private String password;
     private Integer status;
     private String token;
-    private Map<String,String> roles;
+    private String roles;
     private Date createdAt;
     private Integer createdBy;
     private Date modifiedAt;
@@ -50,9 +50,9 @@ public class TuserWithRolesFormat {
         this.password=password;
     }
 
-    public Map<String, String> getRoles() { return roles; }
+    public String getRoles() { return roles; }
 
-    public void setRoles(Map<String, String> roles) { this.roles = roles; }
+    public void setRoles(String roles) { this.roles = roles; }
 
     public Integer getStatus(){
         return status;

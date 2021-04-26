@@ -7,7 +7,7 @@ public class TuserWithRolesBuilder {
 
     }
 
-    public static TuserWithRolesFormat fromTuser(Tuser user, Map<String,String> roles){
+    public static TuserWithRolesFormat fromTuser(Tuser user, String roles){
         Tuser origin = user;
         TuserWithRolesFormat destin = new TuserWithRolesFormat();
         destin.setId(origin.getId());

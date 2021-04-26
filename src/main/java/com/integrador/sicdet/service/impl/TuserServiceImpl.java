@@ -120,20 +120,18 @@ public class TuserServiceImpl implements TuserService{
 		Map<String, String> rolesHash = new HashMap<String, String>();
 		String rolesDecription = "";
 		List<String> roles = new ArrayList<>();
+		Crole ole=null;
 		try{
 			Pageable pageable= PageRequest.of(page,size);
 			tuserList = tuserRepository.findAllActive(pageable);
 			for (Tuser user:tuserList){
 				userRoles = userRole.findAllByIdUser(user.getId());
-				Iterator<Tuserrole> it = userRoles.iterator();
-				while (it.hasNext()) {
-					int li = it.next().getIdrol().getId();
-					Crole ole = role.findById(li);
-					rolesDecription = rolesDecription.concat(ole.getDescription());
-					roles.add(ole.getDescription());
-				}//Guardamos los roles para despuesa
-				rolesHash.put("descriptions", rolesDecription);
-				users.add(TuserWithRolesBuilder.fromTuser(user,rolesHash));
+				for (int i=0;i<userRoles.size();i++) {
+					int id=userRoles.get(i).getIdrol().getId();
+					 ole = role.findById(id);
+					System.out.println("ROL ENCONTRADO "+ole.getDescription());
+				}//Guardamos los roles para despues
+				users.add(TuserWithRolesBuilder.fromTuser(user,ole.getDescription()));
 			}
 
 		}catch (Exception e){
