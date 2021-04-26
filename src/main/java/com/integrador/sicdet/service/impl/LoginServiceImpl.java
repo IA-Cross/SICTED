@@ -77,7 +77,6 @@ public class LoginServiceImpl implements LoginService {
             List<String> rolesDescriptionList = new ArrayList();
             if (userRole.findByIdUser(user.getId()) != null) {
                 userRoles = userRole.findAllByIdUser(user.getId());
-                System.out.println("Buscar ROLES "+userRoles);
                 Iterator<Tuserrole> it = userRoles.iterator();
                 while (it.hasNext()) {
                     int li = it.next().getIdrol().getId();

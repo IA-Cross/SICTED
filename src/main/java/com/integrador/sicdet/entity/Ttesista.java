@@ -22,7 +22,7 @@ public class Ttesista implements Serializable{
 	@Column(name = "id")
 	private Integer id;
 	@ManyToOne
-	@JoinColumn(name = "id_person",referencedColumnName = "id")
+	@JoinColumn(name = "idperson",referencedColumnName = "id")
 	private Tperson idPerson;
 	@ManyToOne
 	@JoinColumn(name = "ttesis_id",referencedColumnName = "id")
