@@ -1,8 +1,9 @@
 package com.integrador.sicdet.service.impl;
 
-import com.integrador.sicdet.entity.Tperson;
-import com.integrador.sicdet.entity.Tuser;
+import com.integrador.sicdet.entity.*;
+import com.integrador.sicdet.repository.CroleRepository;
 import com.integrador.sicdet.repository.TuserRepository;
+import com.integrador.sicdet.repository.TuserroleRepository;
 import com.integrador.sicdet.service.TuserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,10 @@ public class TuserServiceImpl implements TuserService{
 
 	@Autowired
 	private TuserRepository tuserRepository;
+	@Autowired
+	private TuserroleRepository userRole;
+	@Autowired
+	private CroleRepository role;
 
 	@Override
 	public void insert(Tuser tuser ) throws Exception{
@@ -107,18 +112,36 @@ public class TuserServiceImpl implements TuserService{
 		}
 	}
 	@Override
-	public List<Tuser> findAll(int page,int size) throws Exception{
+	public List<TuserWithRolesFormat> findAll(int page, int size) throws Exception{
 		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
 		List<Tuser>tuserList=null;
+		List<TuserWithRolesFormat>users= new ArrayList<>();
+		List<Tuserrole> userRoles = null;
+		Map<String, String> rolesHash = new HashMap<String, String>();
+		String rolesDecription = "";
+		List<String> roles = new ArrayList<>();
 		try{
 			Pageable pageable= PageRequest.of(page,size);
 			tuserList = tuserRepository.findAllActive(pageable);
+			for (Tuser user:tuserList){
+				userRoles = userRole.findAllByIdUser(user.getId());
+				Iterator<Tuserrole> it = userRoles.iterator();
+				while (it.hasNext()) {
+					int li = it.next().getIdrol().getId();
+					Crole ole = role.findById(li);
+					rolesDecription = rolesDecription.concat(ole.getDescription());
+					roles.add(ole.getDescription());
+				}//Guardamos los roles para despuesa
+				rolesHash.put("descriptions", rolesDecription);
+				users.add(TuserWithRolesBuilder.fromTuser(user,rolesHash));
+			}
+
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
 		}
 		LOGGER.debug(">>>> findAll <<<< tuserList: {}",tuserList);
-		return tuserList;
+		return users;
 	}
 	
 	@Override

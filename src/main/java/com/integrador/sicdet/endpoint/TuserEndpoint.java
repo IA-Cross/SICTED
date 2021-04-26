@@ -1,6 +1,7 @@
 package com.integrador.sicdet.endpoint;
 
 import com.integrador.sicdet.entity.Tuser;
+import com.integrador.sicdet.entity.TuserWithRolesFormat;
 import com.integrador.sicdet.service.TuserService;
 import com.integrador.sicdet.config.ResponseBody;
 import com.integrador.sicdet.config.Utils;
@@ -73,15 +74,15 @@ public class TuserEndpoint{
 	}
 
 	@GetMapping("/findAll")
-	public ResponseEntity<ResponseBody<List<Tuser>>> findAll(@RequestParam("page") int page,@RequestParam("size") int size){
+	public ResponseEntity<ResponseBody<List<TuserWithRolesFormat>>> findAll(@RequestParam("page") int page,@RequestParam("size") int size){
 		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
-		ResponseEntity<ResponseBody<List<Tuser>>> response=null;
-		List<Tuser>tuserList=null;
+		ResponseEntity<ResponseBody<List<TuserWithRolesFormat>>> response=null;
+		List<TuserWithRolesFormat>tuserList=null;
 		try{
 			tuserList=tuserService.findAll(page,size);
-			response=Utils.<List<Tuser>>response(HttpStatus.OK,"Lista encontrada",tuserList);
+			response=Utils.<List<TuserWithRolesFormat>>response(HttpStatus.OK,"Lista encontrada",tuserList);
 		}catch (Exception e){
-			response=Utils.<List<Tuser>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tuserList);
+			response=Utils.<List<TuserWithRolesFormat>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tuserList);
 		}
 		return response;
 	}
