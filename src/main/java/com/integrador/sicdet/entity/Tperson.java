@@ -11,6 +11,8 @@ import java.util.Date;
 @NamedQueries({
 		@NamedQuery(name = "Tperson.findPersonjTest",query = "select c from Tperson c where c.status=1"),
 		@NamedQuery(name = "Tperson.findByIdActive", query = "select s from Tperson s where s.id = :id and s.status=1"),
+		@NamedQuery(name = "Tperson.findAllActive", query = "select s from Tperson s where s.status=1"),
+		@NamedQuery(name = "Tperson.searchByName", query = "select s from Tperson s where s.status=1 and (s.name like :name or s.firstlastname like :name or s.secondlastname like :name)"),
 })
 public class Tperson implements Serializable{ 
 

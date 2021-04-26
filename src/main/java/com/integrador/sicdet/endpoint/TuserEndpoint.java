@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.List;
 
@@ -27,9 +30,15 @@ public class TuserEndpoint{
 	@PostMapping("/insert")
 	public ResponseEntity<ResponseBody<Void>> insert(@RequestBody Tuser tuser){
 		LOGGER.debug(">>>Insert()->tuser:{}",tuser);
+		Tuser user = tuser;
+		user.setCreatedAt(new Date());
+		user.setModifiedAt(new Date());
+		user.setCreatedBy(1);
+		user.setModifiedBy(1);
+		System.out.println(user);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
-			tuserService.insert(tuser);
+			tuserService.insert(user);
 			response= Utils.<Void>response(HttpStatus.CREATED,"Se inserto el registro",null);
 		}catch (Exception e){
 			response=Utils.<Void>response(HttpStatus.BAD_REQUEST,false,"No se puedo insertar el registro",null);
@@ -87,6 +96,20 @@ public class TuserEndpoint{
 			response = Utils.<Tuser>response(HttpStatus.OK,"Usuario encontrado",user);
 		} catch (Exception e) {
 			response = Utils.<Tuser>response(HttpStatus.NOT_FOUND,"Usuario no encontrado", user);
+		}
+		return response;
+	}
+
+	@GetMapping("/searchUsersByEmail")
+	public ResponseEntity<ResponseBody<List<Tuser>>>searchUser(@RequestParam("email") String email){
+		LOGGER.debug(">>>>>>searchUser<<<<<< name: {}", email);
+		List<Tuser> user = null;
+		ResponseEntity<ResponseBody<List<Tuser>>> response = null;
+		try {
+			user = tuserService.searchUser(email);
+			response = Utils.<List<Tuser>>response(HttpStatus.OK,"Usuario encontrado",user);
+		}catch(Exception e){
+			response= Utils.<List<Tuser>>response(HttpStatus.NOT_FOUND,"Usuario no encontrado", user);
 		}
 		return response;
 	}

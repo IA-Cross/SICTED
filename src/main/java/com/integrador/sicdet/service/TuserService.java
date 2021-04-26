@@ -8,4 +8,5 @@ public interface TuserService{
 	void delete(Integer id) throws Exception;
 	List<Tuser> findAll(int page,int size) throws Exception;
 	Tuser findUserById(int id) throws Exception;
+	List<Tuser> searchUser(String name) throws Exception;
 }

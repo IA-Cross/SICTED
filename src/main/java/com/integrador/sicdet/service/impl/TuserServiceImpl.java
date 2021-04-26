@@ -8,12 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
-import java.util.Date;
 
 @Service
 public class TuserServiceImpl implements TuserService{
@@ -132,6 +131,19 @@ public class TuserServiceImpl implements TuserService{
 			throw new Exception(e);
 		}
 		return res;		
+	}
+
+	@Override
+	public List<Tuser> searchUser(String name) throws Exception {
+		List<Tuser>finded=new ArrayList<>();
+		try{
+			name=name.replace(" ", "%");
+			finded= tuserRepository.searchByName("%"+name+"%");
+
+		}catch(Exception e){
+			LOGGER.error("Exception: {}",e);
+		}
+		return finded;
 	}
 
 }

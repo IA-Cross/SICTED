@@ -75,4 +75,18 @@ public class TtesistaEndpoint{
 		}
 		return response;
 	}
+
+	@GetMapping("/searchByEnrrollment")
+	public ResponseEntity<ResponseBody<List<Ttesista>>> searchByEnrrollment(@RequestParam("enrrollment") String enrrollment){
+		LOGGER.debug(">>>> searchByEnrrollment <<<< enrrollment: {}",enrrollment);
+		ResponseEntity<ResponseBody<List<Ttesista>>> response=null;
+		List<Ttesista>ttesistaList=null;
+		try{
+			ttesistaList=ttesistaService.searchByEnrrollment(enrrollment);
+			response=Utils.<List<Ttesista>>response(HttpStatus.OK,"Lista encontrada",ttesistaList);
+		}catch (Exception e){
+			response=Utils.<List<Ttesista>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesistaList);
+		}
+		return response;
+	}
 }

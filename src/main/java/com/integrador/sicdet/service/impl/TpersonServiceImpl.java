@@ -1,18 +1,18 @@
 package com.integrador.sicdet.service.impl;
 
 import com.integrador.sicdet.entity.Tperson;
+import com.integrador.sicdet.entity.Tuser;
 import com.integrador.sicdet.repository.TpersonRepository;
 import com.integrador.sicdet.service.TpersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
-import java.util.Date;
 
 @Service
 public class TpersonServiceImpl implements TpersonService{
@@ -25,9 +25,14 @@ public class TpersonServiceImpl implements TpersonService{
 
 	@Override
 	public void insert(Tperson tperson ) throws Exception{
-		LOGGER.debug(">>>Insert()->tperson:{}",tperson);
 		try{
-			tpersonRepository.save(tperson);
+		tperson.setCreatedAt(new Date());
+		tperson.setModifiedAt(new Date());
+		tperson.setCreatedBy(1);
+		tperson.setModifiedBy(1);
+		tperson.setStatus(1);
+		LOGGER.debug(">>>Insert()->tperson:{}",tperson);
+		tpersonRepository.save(tperson);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -121,7 +126,8 @@ public class TpersonServiceImpl implements TpersonService{
 		List<Tperson>tpersonList=null;
 		try{
 			Pageable pageable= PageRequest.of(page,size);
-			tpersonList = tpersonRepository.findAll(pageable).toList();
+			tpersonList = tpersonRepository.findAllActive(pageable);
+
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -142,6 +148,19 @@ public class TpersonServiceImpl implements TpersonService{
 		}
 		LOGGER.debug(">>>> findAll <<<< tpersonList: {}",tpersonList);
 		return tpersonList;
+	}
+
+	@Override
+	public List<Tperson> searchPerson(String name) throws Exception {
+		LOGGER.debug(">>>>>name: {}<<<<<<",name);
+		List<Tperson>finded=new ArrayList<>();
+		try{
+			name=name.replace(" ", "%");
+			finded= tpersonRepository.searchByName("%"+name+"%");
+		}catch(Exception e){
+			LOGGER.error("Exception: {}",e);
+		}
+		return finded;
 	}
 
 }

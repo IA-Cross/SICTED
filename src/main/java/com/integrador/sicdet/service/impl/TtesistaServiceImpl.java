@@ -3,18 +3,18 @@ package com.integrador.sicdet.service.impl;
 import com.integrador.sicdet.entity.Tperson;
 import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.entity.Ttesista;
+import com.integrador.sicdet.entity.Tuser;
 import com.integrador.sicdet.repository.TtesistaRepository;
 import com.integrador.sicdet.service.TtesistaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
-import java.util.Date;
 
 @Service
 public class TtesistaServiceImpl implements TtesistaService{
@@ -129,13 +129,25 @@ public class TtesistaServiceImpl implements TtesistaService{
 		List<Ttesista>ttesistaList=null;
 		try{
 			Pageable pageable= PageRequest.of(page,size);
-			ttesistaList = ttesistaRepository.findAll(pageable).toList();
+			ttesistaList = ttesistaRepository.findAllActive(pageable);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
 		}
 		LOGGER.debug(">>>> findAll <<<< ttesistaList: {}",ttesistaList);
 		return ttesistaList;
+	}
+
+	@Override
+	public List<Ttesista> searchByEnrrollment(String enrrollment) throws Exception {
+		LOGGER.debug(">>>> searchByEnrrollment <<<< enrrollment: {}",enrrollment);
+		List<Ttesista>finded=new ArrayList<>();
+		try{
+			finded= ttesistaRepository.searchByEnrrollment("%"+enrrollment+"%");
+		}catch(Exception e){
+			LOGGER.error("Exception: {}",e);
+		}
+		return finded;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.integrador.sicdet.endpoint;
 
 import com.integrador.sicdet.entity.Tperson;
+import com.integrador.sicdet.entity.Tuser;
 import com.integrador.sicdet.service.TpersonService;
 import com.integrador.sicdet.config.ResponseBody;
 import com.integrador.sicdet.config.Utils;
@@ -73,6 +74,21 @@ public class TpersonEndpoint{
 			response=Utils.<List<Tperson>>response(HttpStatus.OK,"Lista encontrada",tpersonList);
 		}catch (Exception e){
 			response=Utils.<List<Tperson>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tpersonList);
+		}
+		return response;
+	}
+
+
+	@GetMapping("/searchUsersByName")
+	public ResponseEntity<ResponseBody<List<Tperson>>>searchUser(@RequestParam("name") String name){
+		LOGGER.debug(">>>>>>searchUser<<<<<< name: {}", name);
+		List<Tperson> person = null;
+		ResponseEntity<ResponseBody<List<Tperson>>> response = null;
+		try {
+			person = tpersonService.searchPerson(name);
+			response = Utils.<List<Tperson>>response(HttpStatus.OK,"Usuario encontrado",person);
+		}catch(Exception e){
+			response= Utils.<List<Tperson>>response(HttpStatus.NOT_FOUND,"Usuario no encontrado", person);
 		}
 		return response;
 	}
