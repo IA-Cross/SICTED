@@ -77,11 +77,12 @@ public class LoginServiceImpl implements LoginService {
             List<String> rolesDescriptionList = new ArrayList();
             if (userRole.findByIdUser(user.getId()) != null) {
                 userRoles = userRole.findAllByIdUser(user.getId());
+                System.out.println("Buscar ROLES "+userRoles);
                 Iterator<Tuserrole> it = userRoles.iterator();
                 while (it.hasNext()) {
                     int li = it.next().getIdrol().getId();
                     Crole ole = role.findById(li);
-                    rolesDecription = rolesDecription.concat(ole.getDescription() + ",");
+                    rolesDecription = rolesDecription.concat(ole.getDescription());
                     roles.add(ole.getDescription());
                     //Si es un estudiante se activa esta bandera
                     if (ole.getId() == 1) {
@@ -158,6 +159,7 @@ public class LoginServiceImpl implements LoginService {
             tokenResponseBody.setEmail(user.getEmail());
             tokenResponseBody.setPerson(person);
             tokenResponseBody.setToken(token);
+            tokenResponseBody.setRoles(rolesHash);
 
             user.setToken(token);
             userRepo.save(user);
