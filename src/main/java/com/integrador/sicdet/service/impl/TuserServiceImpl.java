@@ -112,7 +112,7 @@ public class TuserServiceImpl implements TuserService{
 		List<Tuser>tuserList=null;
 		try{
 			Pageable pageable= PageRequest.of(page,size);
-			tuserList = tuserRepository.findAll(pageable).toList();
+			tuserList = tuserRepository.findAllActive(pageable);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

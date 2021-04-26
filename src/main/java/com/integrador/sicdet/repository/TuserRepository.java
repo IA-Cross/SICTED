@@ -1,5 +1,6 @@
 package com.integrador.sicdet.repository;
 import com.integrador.sicdet.entity.Tuser;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,4 +13,5 @@ public interface TuserRepository extends JpaRepository<Tuser,Integer>{
     Tuser findByEmail(String email);
     Tuser findUserById(int id);
     List<Tuser> searchByName(@Param("name") String name);
+    List<Tuser> findAllActive(Pageable pageable);
 }
