@@ -32,6 +32,12 @@ public class TasesorServiceImpl implements TasesorService{
 	public void insert(Tasesor tasesor ) throws Exception{
 		LOGGER.debug(">>>Insert()->tasesor:{}",tasesor);
 		try{
+			tasesor.setCreatedAt(new Date());
+			tasesor.setModifiedAt(new Date());
+			tasesor.setCreatedBy(1);
+			tasesor.setModifiedBy(1);
+			tasesor.setStatus(1);
+			LOGGER.debug(">>>Insert()->tasesor:{}",tasesor);
 			tasesorRepository.save(tasesor);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

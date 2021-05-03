@@ -31,6 +31,12 @@ public class TtesisServiceImpl implements TtesisService{
 	public void insert(Ttesis ttesis ) throws Exception{
 		LOGGER.debug(">>>Insert()->ttesis:{}",ttesis);
 		try{
+			ttesis.setCreatedAt(new Date());
+			ttesis.setModifiedAt(new Date());
+			ttesis.setCreatedBy(1);
+			ttesis.setModifiedBy(1);
+			ttesis.setStatus(1);
+			LOGGER.debug(">>>Insert()->tasesor:{}",ttesis);
 			ttesisRepository.save(ttesis);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
