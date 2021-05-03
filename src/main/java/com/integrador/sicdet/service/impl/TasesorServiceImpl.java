@@ -112,7 +112,7 @@ public class TasesorServiceImpl implements TasesorService{
 		List<Tasesor>tasesorList=null;
 		try{
 			Pageable pageable= PageRequest.of(page,size);
-			tasesorList = tasesorRepository.findAll(pageable).toList();
+			tasesorList = tasesorRepository.findAllActive(pageable);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
