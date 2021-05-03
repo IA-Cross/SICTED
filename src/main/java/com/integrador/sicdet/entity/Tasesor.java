@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Date;
 @Entity
 @Table(name= "tasesor")
+@NamedQueries({
+		@NamedQuery(name = "Tasesor.findAllActive",query = "select c from Tasesor c where c.status=1")
+})
 public class Tasesor implements Serializable{ 
 
 	@Id

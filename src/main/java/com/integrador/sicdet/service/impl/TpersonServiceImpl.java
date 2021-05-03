@@ -3,6 +3,7 @@ package com.integrador.sicdet.service.impl;
 import com.integrador.sicdet.entity.Tperson;
 import com.integrador.sicdet.entity.Tuser;
 import com.integrador.sicdet.repository.TpersonRepository;
+import com.integrador.sicdet.repository.TuserRepository;
 import com.integrador.sicdet.service.TpersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,8 @@ public class TpersonServiceImpl implements TpersonService{
 
 	@Autowired
 	private TpersonRepository tpersonRepository;
+	@Autowired
+	private TuserRepository usersRepo;
 
 	@Override
 	public void insert(Tperson tperson ) throws Exception{
@@ -161,6 +164,34 @@ public class TpersonServiceImpl implements TpersonService{
 			LOGGER.error("Exception: {}",e);
 		}
 		return finded;
+	}
+
+	@Override
+	public List<Tperson> personsWithoutUser() throws Exception {
+		List<Tperson> res=new ArrayList<>();
+		List<Tperson> finded=null;
+		List<Tuser> users= null;
+		boolean findedFlag=false;
+		try {
+			users=usersRepo.findAll();
+			finded= tpersonRepository.findAll();
+			for(Tperson person: finded){
+				findedFlag=false;
+				for (Tuser user : users) {
+					if (person.getId().equals(user.getIdperson().getId())) {
+						findedFlag = true;
+						break;
+					}
+				}
+				if(!findedFlag)
+				res.add(person);
+			}
+
+		}catch(Exception e){
+			LOGGER.error("Exception: {}",e);
+		}
+
+		return res;
 	}
 
 }
