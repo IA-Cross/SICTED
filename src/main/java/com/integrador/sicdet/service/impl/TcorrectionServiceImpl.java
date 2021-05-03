@@ -127,4 +127,18 @@ public class TcorrectionServiceImpl implements TcorrectionService{
 		return tcorrectionList;
 	}
 
+	@Override
+	public List<Tcorrection> getCorrectionsByIdTesis(int page, int size, int idTesis) throws Exception {
+		List<Tcorrection> res=null;
+		Pageable pageable= PageRequest.of(page,size);
+		try {
+			res= tcorrectionRepository.findByIdTesis(idTesis,pageable);
+		}catch(Exception e){
+			LOGGER.error("Exception: {}",e);
+		}
+		LOGGER.debug(">>>> findAll <<<< res: {}",res);
+
+		return res;
+	}
+
 }

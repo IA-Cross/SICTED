@@ -49,8 +49,8 @@ public class TcorrectionEndpoint{
 	return response;
 	}
 
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<ResponseBody<Void>> delete(@PathVariable Integer id){
+	@GetMapping("/delete")
+	public ResponseEntity<ResponseBody<Void>> delete(@RequestParam("id") int id){
 		LOGGER.debug(">>>> delete->id: {}",id);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -69,6 +69,20 @@ public class TcorrectionEndpoint{
 		List<Tcorrection>tcorrectionList=null;
 		try{
 			tcorrectionList=tcorrectionService.findAll(page,size);
+			response=Utils.<List<Tcorrection>>response(HttpStatus.OK,"Lista encontrada",tcorrectionList);
+		}catch (Exception e){
+			response=Utils.<List<Tcorrection>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tcorrectionList);
+		}
+		return response;
+	}
+
+	@GetMapping("/getCorrectionsByIdTesis")
+	public ResponseEntity<ResponseBody<List<Tcorrection>>> getCorrectionsByIdTesis(@RequestParam("page") int page,@RequestParam("size") int size,@RequestParam("idTesis") int idTesis){
+		LOGGER.debug(">>>> getCorrectionsByIdTesis <<<< page: {} size: {}",page,size);
+		ResponseEntity<ResponseBody<List<Tcorrection>>> response=null;
+		List<Tcorrection>tcorrectionList=null;
+		try{
+			tcorrectionList=tcorrectionService.getCorrectionsByIdTesis(page, size, idTesis);
 			response=Utils.<List<Tcorrection>>response(HttpStatus.OK,"Lista encontrada",tcorrectionList);
 		}catch (Exception e){
 			response=Utils.<List<Tcorrection>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tcorrectionList);

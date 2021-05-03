@@ -7,4 +7,5 @@ public interface TcorrectionService{
 	void update(Integer id, Map<String,Object> data) throws Exception;
 	void delete(Integer id) throws Exception;
 	List<Tcorrection> findAll(int page,int size) throws Exception;
+	List<Tcorrection>getCorrectionsByIdTesis(int page,int size,int idTesis)throws Exception;
 }

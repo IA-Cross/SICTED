@@ -12,4 +12,5 @@ public interface TtesisService{
 	List<TesisCardFormat> findAllCardFormat() throws Exception;
 	Ttesis findById(int id) throws Exception;
 	Ttesis searchTesisByTitle(String titulo) throws Exception;
+	List<Ttesis> findAdvisedTesis (int id);
 }

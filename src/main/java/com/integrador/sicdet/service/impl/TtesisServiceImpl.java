@@ -270,5 +270,16 @@ public class TtesisServiceImpl implements TtesisService{
 		return tesis;
 	}
 
+	@Override
+	public List<Ttesis> findAdvisedTesis(int id) {
+		List<Ttesis> res = null;
+		try{
+			res = ttesisRepository.findByIdAsesor(id);
+		}catch(Exception e){
+			LOGGER.error("Exception: {}",e);
+		}
+		return res;
+	}
+
 
 }
