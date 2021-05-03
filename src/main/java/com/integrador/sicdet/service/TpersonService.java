@@ -11,4 +11,5 @@ public interface TpersonService{
 	List<Tperson> findAll(int page,int size) throws Exception;
 	List<Tperson> findPersonjTest() throws Exception;
 	List<Tperson> searchPerson(String name) throws Exception;
+	List<Tperson> personsWithoutUser() throws Exception;
 }

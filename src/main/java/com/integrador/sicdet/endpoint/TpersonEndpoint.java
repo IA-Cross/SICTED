@@ -92,4 +92,19 @@ public class TpersonEndpoint{
 		}
 		return response;
 	}
+
+	@GetMapping("/personsWithoutUser")
+	public ResponseEntity<ResponseBody<List<Tperson>>>personsWithoutUser(){
+		LOGGER.debug(">>>>>>searchPersons<<<<<<");
+		List<Tperson> person = null;
+		ResponseEntity<ResponseBody<List<Tperson>>> response = null;
+		try {
+			person = tpersonService.personsWithoutUser();
+			response = Utils.<List<Tperson>>response(HttpStatus.OK,"Personas encontradas",person);
+		}catch(Exception e){
+			response= Utils.<List<Tperson>>response(HttpStatus.NOT_FOUND,"No se encontro", person);
+		}
+		return response;
+	}
+
 }
