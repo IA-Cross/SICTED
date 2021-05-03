@@ -27,6 +27,12 @@ public class CspecialtiesServiceImpl implements CspecialtiesService{
 	public void insert(Cspecialties cspecialties ) throws Exception{
 		LOGGER.debug(">>>Insert()->cspecialties:{}",cspecialties);
 		try{
+			cspecialties.setCreatedAt(new Date());
+			cspecialties.setModifiedAt(new Date());
+			cspecialties.setCreatedBy(1);
+			cspecialties.setModifiedBy(1);
+			cspecialties.setStatus(1);
+			LOGGER.debug(">>>Insert()->cspecialties:{}",cspecialties);
 			cspecialtiesRepository.save(cspecialties);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

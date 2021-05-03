@@ -28,6 +28,12 @@ public class TprogressServiceImpl implements TprogressService{
 	public void insert(Tprogress tprogress ) throws Exception{
 		LOGGER.debug(">>>Insert()->tprogress:{}",tprogress);
 		try{
+			tprogress.setCreatedAt(new Date());
+			tprogress.setModifiedAt(new Date());
+			tprogress.setCreatedBy(1);
+			tprogress.setModifiedBy(1);
+			tprogress.setStatus(1);
+			LOGGER.debug(">>>Insert()->tprogress:{}",tprogress);
 			tprogressRepository.save(tprogress);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

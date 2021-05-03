@@ -29,6 +29,12 @@ public class TuserroleServiceImpl implements TuserroleService{
 	public void insert(Tuserrole tuserrole ) throws Exception{
 		LOGGER.debug(">>>Insert()->tuserrole:{}",tuserrole);
 		try{
+			tuserrole.setCreatedAt(new Date());
+			tuserrole.setModifiedAt(new Date());
+			tuserrole.setCreatedBy(1);
+			tuserrole.setModifiedBy(1);
+			tuserrole.setStatus(1);
+			LOGGER.debug(">>>Insert()->tuserrole:{}",tuserrole);
 			tuserroleRepository.save(tuserrole);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

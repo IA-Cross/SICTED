@@ -27,6 +27,12 @@ public class CroleServiceImpl implements CroleService{
 	public void insert(Crole crole ) throws Exception{
 		LOGGER.debug(">>>Insert()->crole:{}",crole);
 		try{
+			crole.setCreatedAt(new Date());
+			crole.setModifiedAt(new Date());
+			crole.setCreatedBy(1);
+			crole.setModifiedBy(1);
+			crole.setStatus(1);
+			LOGGER.debug(">>>Insert()->crole:{}",crole);
 			croleRepository.save(crole);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

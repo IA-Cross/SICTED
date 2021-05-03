@@ -26,6 +26,12 @@ public class TnoticesServiceImpl implements TnoticesService{
 	public void insert(Tnotices tnotices ) throws Exception{
 		LOGGER.debug(">>>Insert()->tnotices:{}",tnotices);
 		try{
+			tnotices.setCreatedAt(new Date());
+			tnotices.setModifiedAt(new Date());
+			tnotices.setCreatedBy(1);
+			tnotices.setModifiedBy(1);
+			tnotices.setStatus(1);
+			LOGGER.debug(">>>Insert()->tnotices:{}",tnotices);
 			tnoticesRepository.save(tnotices);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

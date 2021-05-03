@@ -32,6 +32,12 @@ public class TuserServiceImpl implements TuserService{
 	public void insert(Tuser tuser ) throws Exception{
 		LOGGER.debug(">>>Insert()->tuser:{}",tuser);
 		try{
+			tuser.setCreatedAt(new Date());
+			tuser.setModifiedAt(new Date());
+			tuser.setCreatedBy(1);
+			tuser.setModifiedBy(1);
+			tuser.setStatus(1);
+			LOGGER.debug(">>>Insert()->tuser:{}",tuser);
 			tuserRepository.save(tuser);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

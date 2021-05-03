@@ -27,6 +27,12 @@ public class TcatalogServiceImpl implements TcatalogService{
 	public void insert(Tcatalog tcatalog ) throws Exception{
 		LOGGER.debug(">>>Insert()->tcatalog:{}",tcatalog);
 		try{
+			tcatalog.setCreatedAt(new Date());
+			tcatalog.setModifiedAt(new Date());
+			tcatalog.setCreatedBy(1);
+			tcatalog.setModifiedBy(1);
+			tcatalog.setStatus(1);
+			LOGGER.debug(">>>Insert()->tcatalog:{}",tcatalog);
 			tcatalogRepository.save(tcatalog);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

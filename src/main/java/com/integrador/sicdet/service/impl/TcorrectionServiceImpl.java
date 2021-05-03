@@ -28,6 +28,12 @@ public class TcorrectionServiceImpl implements TcorrectionService{
 	public void insert(Tcorrection tcorrection ) throws Exception{
 		LOGGER.debug(">>>Insert()->tcorrection:{}",tcorrection);
 		try{
+			tcorrection.setCreatedAt(new Date());
+			tcorrection.setModifiedAt(new Date());
+			tcorrection.setCreatedBy(1);
+			tcorrection.setModifiedBy(1);
+			tcorrection.setStatus(1);
+			LOGGER.debug(">>>Insert()->tcorrection:{}",tcorrection);
 			tcorrectionRepository.save(tcorrection);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

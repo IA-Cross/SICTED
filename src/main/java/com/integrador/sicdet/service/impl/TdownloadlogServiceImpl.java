@@ -28,6 +28,9 @@ public class TdownloadlogServiceImpl implements TdownloadlogService{
 	public void insert(Tdownloadlog tdownloadlog ) throws Exception{
 		LOGGER.debug(">>>Insert()->tdownloadlog:{}",tdownloadlog);
 		try{
+			tdownloadlog.setCreatedAt(new Date());
+			tdownloadlog.setCreatedBy(1);
+			LOGGER.debug(">>>Insert()->tasesor:{}",tdownloadlog);
 			tdownloadlogRepository.save(tdownloadlog);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);

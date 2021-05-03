@@ -117,6 +117,7 @@ public class TpersonServiceImpl implements TpersonService{
 			if(tpersonOptional.getStatus() == 0) {
 				throw new Exception("No existe el registro");				
 			}
+			tpersonOptional.setStatus(0);
 			tpersonRepository.save(tpersonOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
