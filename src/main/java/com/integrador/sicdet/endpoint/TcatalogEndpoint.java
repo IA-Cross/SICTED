@@ -75,4 +75,19 @@ public class TcatalogEndpoint{
 		}
 		return response;
 	}
+	
+	@GetMapping("/findCatalogByCode")
+	public ResponseEntity<ResponseBody<List<Tcatalog>>> findCatalogByCode(@RequestParam Map<String,String>params){
+		LOGGER.debug(">>>> findCatalogByCode <<<< catalog {}", params);
+		ResponseEntity<ResponseBody<List<Tcatalog>>> response=null;
+		List<Tcatalog>tcatalogList=null;
+		try{
+			String code = params.get("code");
+			tcatalogList=tcatalogService.findCatalogByCode(code);
+			response=Utils.<List<Tcatalog>>response(HttpStatus.OK,"Lista encontrada",tcatalogList);
+		}catch (Exception e){
+			response=Utils.<List<Tcatalog>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tcatalogList);
+		}
+		return response;
+	}
 }

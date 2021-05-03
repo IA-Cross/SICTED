@@ -242,6 +242,33 @@ public class TtesisServiceImpl implements TtesisService{
 		LOGGER.debug(">>>> findAll <<<< ttesisList: {}",ttesisList);
 		return cardsRes;
 	}
+	
+	@Override
+	public Ttesis findById(int id) throws Exception {
+		LOGGER.debug(">>>> findById <<<<");
+		Ttesis tesis = null;
+		try {
+			tesis = ttesisRepository.findById(id);
+		}catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+		LOGGER.debug(">>>> findAll <<<< tesis encontrada: {}",tesis);
+		return tesis;
+	}
+	@Override
+	public Ttesis searchTesisByTitle(String titulo) throws Exception {
+		LOGGER.debug(">>>> searchTesisByTitle <<<<");
+		Ttesis tesis = null;
+		try {
+			tesis = ttesisRepository.searchTesisByTitle(titulo);
+		}catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+		LOGGER.debug(">>>> findAll <<<< tesis encontrada: {}",tesis);
+		return tesis;
+	}
 
 
 }

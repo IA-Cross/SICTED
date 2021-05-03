@@ -120,5 +120,19 @@ public class TcatalogServiceImpl implements TcatalogService{
 		LOGGER.debug(">>>> findAll <<<< tcatalogList: {}",tcatalogList);
 		return tcatalogList;
 	}
+	
+	@Override
+	public List<Tcatalog> findCatalogByCode(String code) throws Exception {
+		LOGGER.debug(">>>> findCatalogByCode <<<< catalog: {}",code);
+		List<Tcatalog>tcatalogList=null;
+		try {
+			tcatalogList = tcatalogRepository.findCatalogByCode(code);
+		} catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+		LOGGER.debug(">>>> findCatalogByCode <<<< tcatalogList: {}",tcatalogList);
+		return tcatalogList;
+	}
 
 }

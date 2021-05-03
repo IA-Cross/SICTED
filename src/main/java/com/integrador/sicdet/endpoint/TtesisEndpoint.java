@@ -105,4 +105,34 @@ public class TtesisEndpoint{
 		}
 		return response;
 	}
+	
+	@GetMapping("/findById")
+	public ResponseEntity<ResponseBody<Ttesis>> findById(@RequestParam Map<String,String>params){
+		LOGGER.debug(">>>> findById <<<<");
+		ResponseEntity<ResponseBody<Ttesis>> response = null;
+		Ttesis tesis = null;
+		try {
+			int id = Integer.parseInt(params.get("id"));
+			tesis = ttesisService.findById(id);
+			response = Utils.<Ttesis>response(HttpStatus.OK,"Tesis encontrada",tesis);
+		} catch (Exception e){
+			response = Utils.<Ttesis>response(HttpStatus.NOT_FOUND,"Tesis encontrada",tesis);
+		}
+		return response;
+	}
+	
+	@GetMapping("/searchTesisByTitle")
+	public ResponseEntity<ResponseBody<Ttesis>> searchTesisByTitle(@RequestParam Map<String,String>params){
+		LOGGER.debug(">>>> findById <<<<");
+		ResponseEntity<ResponseBody<Ttesis>> response = null;
+		Ttesis tesis = null;
+		try {
+			String titulo = params.get("titulo");
+			tesis = ttesisService.searchTesisByTitle(titulo);
+			response = Utils.<Ttesis>response(HttpStatus.OK,"Tesis encontrada",tesis);
+		} catch (Exception e){
+			response = Utils.<Ttesis>response(HttpStatus.NOT_FOUND,"Tesis no encontrada",tesis);
+		}
+		return response;
+	}
 }
