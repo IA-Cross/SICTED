@@ -59,7 +59,7 @@ public class SecurityModule implements HandlerInterceptor {
                 return false;
             }
         }catch (Exception e){
-            LOG.error(">>> Corrupt Credentials <<<");
+            LOG.error(">>> Corrupt Credentials <<< error:{}",e);
             response.setStatus(400);
             return false;
         }
