@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.springframework.data.domain.Pageable;
@@ -46,61 +47,59 @@ public class TpersonServiceImpl implements TpersonService{
 
 		LOGGER.debug(">>>> update->id: {}, tperson: {}",id,data);
 		try{
-			Optional<Tperson> tpersonOptional = tpersonRepository.findById(id);
-			if(!tpersonOptional.isPresent()){
+			Tperson tpersonOptional = tpersonRepository.findById(id).get();
+			if(tpersonOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(tpersonOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//name
 			if(data.containsKey("name")){
 				String name = data.get("name").toString();
-				tpersonOptional.get().setName(name);
+				tpersonOptional.setName(name);
 			}
 			//firstlastname
 			if(data.containsKey("firstlastname")){
 				String firstlastname = data.get("firstlastname").toString();
-				tpersonOptional.get().setFirstlastname(firstlastname);
+				tpersonOptional.setFirstlastname(firstlastname);
 			}
 			//secondlastname
 			if(data.containsKey("secondlastname")){
 				String secondlastname = data.get("secondlastname").toString();
-				tpersonOptional.get().setSecondlastname(secondlastname);
+				tpersonOptional.setSecondlastname(secondlastname);
 			}
 			//gender
 			if(data.containsKey("gender")){
 				String gender = data.get("gender").toString();
-				tpersonOptional.get().setGender(gender);
+				tpersonOptional.setGender(gender);
 			}
 			//birthdate
 			if(data.containsKey("birthdate")){
-				Date birthdate = (Date)data.get("birthdate");
-				tpersonOptional.get().setBirthdate(birthdate);
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				tpersonOptional.get().setStatus(status);
+				Date birthdate = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("birthdate"));
+				tpersonOptional.setBirthdate(birthdate);
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tpersonOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tpersonOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tpersonOptional.get().setCreatedBy(createdBy);
+				tpersonOptional.setCreatedBy(createdBy);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				tpersonOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				tpersonOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				tpersonOptional.get().setModifiedBy(modifiedBy);
+				tpersonOptional.setModifiedBy(modifiedBy);
 			}
-			tpersonRepository.save(tpersonOptional.get());
+			tpersonRepository.save(tpersonOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

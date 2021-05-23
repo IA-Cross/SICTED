@@ -11,9 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -46,47 +47,44 @@ public class TuserroleServiceImpl implements TuserroleService{
 
 		LOGGER.debug(">>>> update->id: {}, tuserrole: {}",id,data);
 		try{
-			Optional<Tuserrole> tuserroleOptional = tuserroleRepository.findById(id);
-			if(!tuserroleOptional.isPresent()){
+			Tuserrole tuserroleOptional = tuserroleRepository.findById(id).get();
+			if(tuserroleOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(tuserroleOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//iduser
 			if(data.containsKey("iduser")){
-				tuserroleOptional.get().setIduser(new Tuser());
-				tuserroleOptional.get().getIduser().setId((Integer)data.get("iduser"));
+				tuserroleOptional.setIduser(new Tuser());
+				tuserroleOptional.getIduser().setId((Integer)data.get("iduser"));
 			}
 			//idrol
 			if(data.containsKey("idrol")){
-				Integer idrol = (Integer)data.get("idrol");
-				tuserroleOptional.get().setIdrol(new Crole());
-				tuserroleOptional.get().getIdrol().setId((Integer)data.get("idrol"));
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				tuserroleOptional.get().setStatus(status);
+				tuserroleOptional.setIdrol(new Crole());
+				tuserroleOptional.getIdrol().setId((Integer)data.get("idrol"));
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tuserroleOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tuserroleOptional.setCreatedAt(createdAt);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				tuserroleOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				tuserroleOptional.setModifiedAt(modifiedAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tuserroleOptional.get().setCreatedBy(createdBy);
+				tuserroleOptional.setCreatedBy(createdBy);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				tuserroleOptional.get().setModifiedBy(modifiedBy);
+				tuserroleOptional.setModifiedBy(modifiedBy);
 			}
-			tuserroleRepository.save(tuserroleOptional.get());
+			tuserroleRepository.save(tuserroleOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

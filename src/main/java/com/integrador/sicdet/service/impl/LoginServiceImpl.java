@@ -2,7 +2,6 @@ package com.integrador.sicdet.service.impl;
 
 import com.integrador.sicdet.config.UserToken;
 import com.integrador.sicdet.entity.*;
-import com.integrador.sicdet.others.EmailValidation;
 import com.integrador.sicdet.repository.*;
 import com.integrador.sicdet.service.LoginService;
 import com.utilssected.sected.exception.AppException;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -71,10 +69,8 @@ public class LoginServiceImpl implements LoginService {
             List<Tuserrole> userRoles = null;
             Map<String, String> rolesHash = new HashMap<String, String>();
             List<String> roles = new ArrayList<>();
-            List<Crole> rols = null;
             boolean tesist = false;
             String rolesDecription = "";
-            List<String> rolesDescriptionList = new ArrayList();
             if (userRole.findByIdUser(user.getId()) != null) {
                 userRoles = userRole.findAllByIdUser(user.getId());
                 Iterator<Tuserrole> it = userRoles.iterator();
@@ -223,7 +219,6 @@ public class LoginServiceImpl implements LoginService {
             char c = chars[random.nextInt(chars.length)];
             sb.append(c);
         }
-        String output = sb.toString();
         return sb.toString();
     }
 }

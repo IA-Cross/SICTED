@@ -1,6 +1,5 @@
 package com.integrador.sicdet.service;
 import com.integrador.sicdet.entity.Tperson;
-import com.integrador.sicdet.entity.Tuser;
 
 import java.util.List;
 import java.util.Map;

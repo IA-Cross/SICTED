@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.springframework.data.domain.Pageable;
@@ -49,51 +50,49 @@ public class TuserServiceImpl implements TuserService{
 
 		LOGGER.debug(">>>> update->id: {}, tuser: {}",id,data);
 		try{
-			Optional<Tuser> tuserOptional = tuserRepository.findById(id);
-			if(!tuserOptional.isPresent()){
+			Tuser tuserOptional = tuserRepository.findById(id).get();
+			if(tuserOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(tuserOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//idperson
 			if(data.containsKey("idperson")){
-				tuserOptional.get().setIdperson(new Tperson());
-				tuserOptional.get().getIdperson().setId((Integer)data.get("idperson"));
+				tuserOptional.setIdperson(new Tperson());
+				tuserOptional.getIdperson().setId((Integer)data.get("idperson"));
 			}
 			//email
 			if(data.containsKey("email")){
 				String email = data.get("email").toString();
-				tuserOptional.get().setEmail(email);
+				tuserOptional.setEmail(email);
 			}
 			//password
 			if(data.containsKey("password")){
 				String password = data.get("password").toString();
-				tuserOptional.get().setPassword(password);
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				tuserOptional.get().setStatus(status);
+				tuserOptional.setPassword(password);
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tuserOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tuserOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tuserOptional.get().setCreatedBy(createdBy);
+				tuserOptional.setCreatedBy(createdBy);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				tuserOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				tuserOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				tuserOptional.get().setModifiedBy(modifiedBy);
+				tuserOptional.setModifiedBy(modifiedBy);
 			}
-			tuserRepository.save(tuserOptional.get());
+			tuserRepository.save(tuserOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -123,9 +122,6 @@ public class TuserServiceImpl implements TuserService{
 		List<Tuser>tuserList=null;
 		List<TuserWithRolesFormat>users= new ArrayList<>();
 		List<Tuserrole> userRoles = null;
-		Map<String, String> rolesHash = new HashMap<String, String>();
-		String rolesDecription = "";
-		List<String> roles = new ArrayList<>();
 		Crole ole=null;
 		try{
 			Pageable pageable= PageRequest.of(page,size);

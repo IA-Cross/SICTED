@@ -3,7 +3,6 @@ package com.integrador.sicdet.service.impl;
 import com.integrador.sicdet.entity.Tperson;
 import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.entity.Ttesista;
-import com.integrador.sicdet.entity.Tuser;
 import com.integrador.sicdet.repository.TtesistaRepository;
 import com.integrador.sicdet.service.TtesistaService;
 import org.slf4j.Logger;
@@ -11,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.springframework.data.domain.Pageable;
@@ -45,66 +45,64 @@ public class TtesistaServiceImpl implements TtesistaService{
 
 		LOGGER.debug(">>>> update->id: {}, ttesista: {}",id,data);
 		try{
-			Optional<Ttesista> ttesistaOptional = ttesistaRepository.findById(id);
-			if(!ttesistaOptional.isPresent()){
+			Ttesista ttesistaOptional = ttesistaRepository.findById(id).get();
+			if(ttesistaOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(ttesistaOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//idPerson
 			if(data.containsKey("idPerson")){
-				ttesistaOptional.get().setIdPerson(new Tperson());
-				ttesistaOptional.get().getIdPerson().setId((Integer)data.get("idPerson"));
+				ttesistaOptional.setIdPerson(new Tperson());
+				ttesistaOptional.getIdPerson().setId((Integer)data.get("idPerson"));
 			}
 			//ttesisId
 			if(data.containsKey("ttesisId")){
-				ttesistaOptional.get().setTtesisId(new Ttesis());
-				ttesistaOptional.get().getTtesisId().setId((Integer)data.get("ttesisId"));
+				ttesistaOptional.setTtesisId(new Ttesis());
+				ttesistaOptional.getTtesisId().setId((Integer)data.get("ttesisId"));
 			}
 			//enrollment
 			if(data.containsKey("enrollment")){
 				String enrollment = data.get("enrollment").toString();
-				ttesistaOptional.get().setEnrollment(enrollment);
+				ttesistaOptional.setEnrollment(enrollment);
 			}
 			//idCatDegree
 			if(data.containsKey("idCatDegree")){
 				Integer idCatDegree = (Integer)data.get("idCatDegree");
-				ttesistaOptional.get().setIdCatDegree(idCatDegree);
+				ttesistaOptional.setIdCatDegree(idCatDegree);
 			}
 			//yearStart
 			if(data.containsKey("yearStart")){
 				Date yearStart = (Date)data.get("yearStart");
-				ttesistaOptional.get().setYearStart(yearStart);
+				ttesistaOptional.setYearStart(yearStart);
 			}
 			//yearEnd
 			if(data.containsKey("yearEnd")){
 				Date yearEnd = (Date)data.get("yearEnd");
-				ttesistaOptional.get().setYearEnd(yearEnd);
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				ttesistaOptional.get().setStatus(status);
+				ttesistaOptional.setYearEnd(yearEnd);
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				ttesistaOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				ttesistaOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				ttesistaOptional.get().setCreatedBy(createdBy);
+				ttesistaOptional.setCreatedBy(createdBy);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				ttesistaOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				ttesistaOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				ttesistaOptional.get().setModifiedBy(modifiedBy);
+				ttesistaOptional.setModifiedBy(modifiedBy);
 			}
-			ttesistaRepository.save(ttesistaOptional.get());
+			ttesistaRepository.save(ttesistaOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

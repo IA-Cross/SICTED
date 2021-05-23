@@ -9,10 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.stream.Collectors;
 
@@ -31,6 +29,7 @@ public class TtesisServiceImpl implements TtesisService{
 	public void insert(Ttesis ttesis ) throws Exception{
 		LOGGER.debug(">>>Insert()->ttesis:{}",ttesis);
 		try{
+			ttesis.setId(0);
 			ttesis.setCreatedAt(new Date());
 			ttesis.setModifiedAt(new Date());
 			ttesis.setCreatedBy(1);
@@ -48,81 +47,79 @@ public class TtesisServiceImpl implements TtesisService{
 
 		LOGGER.debug(">>>> update->id: {}, ttesis: {}",id,data);
 		try{
-			Optional<Ttesis> ttesisOptional = ttesisRepository.findById(id);
-			if(!ttesisOptional.isPresent()){
+			Ttesis ttesisOptional = ttesisRepository.findById(id).get();
+			if(ttesisOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(ttesisOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//idAsesor
 			if(data.containsKey("idAsesor")){
-				ttesisOptional.get().setIdAsesor(new Tasesor());
-				ttesisOptional.get().getIdAsesor().setId((Integer)data.get("idAsesor"));
+				ttesisOptional.setIdAsesor(new Tasesor());
+				ttesisOptional.getIdAsesor().setId((Integer)data.get("idAsesor"));
 			}
 			//idCatDegree
 			if(data.containsKey("idCatDegree")){
 				Integer idCatDegree = (Integer)data.get("idCatDegree");
-				ttesisOptional.get().setIdCatDegree(idCatDegree);
+				ttesisOptional.setIdCatDegree(idCatDegree);
 			}
 			//idTcatalog
 			if(data.containsKey("idTcatalog")){
 				Integer idTcatalog = (Integer)data.get("idTcatalog");
-				ttesisOptional.get().setIdTcatalog(idTcatalog);
+				ttesisOptional.setIdTcatalog(idTcatalog);
 			}
 			//yearStart
 			if(data.containsKey("yearStart")){
 				Date yearStart = (Date)data.get("yearStart");
-				ttesisOptional.get().setYearStart(yearStart);
+				ttesisOptional.setYearStart(yearStart);
 			}
 			//keywords
 			if(data.containsKey("keywords")){
 				String keywords = data.get("keywords").toString();
-				ttesisOptional.get().setKeywords(keywords);
+				ttesisOptional.setKeywords(keywords);
 			}
 			//categoria
 			if(data.containsKey("categoria")){
 				String categoria = data.get("categoria").toString();
-				ttesisOptional.get().setCategoria(categoria);
+				ttesisOptional.setCategoria(categoria);
 			}
 			//url
 			if(data.containsKey("url")){
 				String url = data.get("url").toString();
-				ttesisOptional.get().setUrl(url);
+				ttesisOptional.setUrl(url);
 			}
 			//isPublished
 			if(data.containsKey("isPublished")){
 				Integer isPublished = (Integer)data.get("isPublished");
-				ttesisOptional.get().setIsPublished(isPublished);
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				ttesisOptional.get().setStatus(status);
+				ttesisOptional.setIsPublished(isPublished);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				ttesisOptional.get().setCreatedBy(createdBy);
+				ttesisOptional.setCreatedBy(createdBy);
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				ttesisOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				ttesisOptional.setCreatedAt(createdAt);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				ttesisOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				ttesisOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				ttesisOptional.get().setModifiedBy(modifiedBy);
+				ttesisOptional.setModifiedBy(modifiedBy);
 			}
 
 			if(data.containsKey("title")){
 				String title = data.get("title").toString();
-				ttesisOptional.get().setTitle(title);
+				ttesisOptional.setTitle(title);
 			}
-			ttesisRepository.save(ttesisOptional.get());
+			ttesisRepository.save(ttesisOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

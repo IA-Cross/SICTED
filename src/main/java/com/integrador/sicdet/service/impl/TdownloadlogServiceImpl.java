@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -42,26 +43,26 @@ public class TdownloadlogServiceImpl implements TdownloadlogService{
 
 		LOGGER.debug(">>>> update->id: {}, tdownloadlog: {}",id,data);
 		try{
-			Optional<Tdownloadlog> tdownloadlogOptional = tdownloadlogRepository.findById(id);
-			if(!tdownloadlogOptional.isPresent()){
+			Tdownloadlog tdownloadlogOptional = tdownloadlogRepository.findById(id).get();
+			if(tdownloadlogOptional == null){
 				throw new Exception("No existe el registro");
 			}
 			//ttesisId
 			if(data.containsKey("ttesisId")){
-				tdownloadlogOptional.get().setTtesisId(new Ttesis());
-				tdownloadlogOptional.get().getTtesisId().setId((Integer)data.get("ttesisId"));
+				tdownloadlogOptional.setTtesisId(new Ttesis());
+				tdownloadlogOptional.getTtesisId().setId((Integer)data.get("ttesisId"));
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tdownloadlogOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tdownloadlogOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tdownloadlogOptional.get().setCreatedBy(createdBy);
+				tdownloadlogOptional.setCreatedBy(createdBy);
 			}
-			tdownloadlogRepository.save(tdownloadlogOptional.get());
+			tdownloadlogRepository.save(tdownloadlogOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

@@ -8,10 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
 
 @Service
 public class TnoticesServiceImpl implements TnoticesService{
@@ -43,51 +41,49 @@ public class TnoticesServiceImpl implements TnoticesService{
 
 		LOGGER.debug(">>>> update->id: {}, tnotices: {}",id,data);
 		try{
-			Optional<Tnotices> tnoticesOptional = tnoticesRepository.findById(id);
-			if(!tnoticesOptional.isPresent()){
+			Tnotices tnoticesOptional = tnoticesRepository.findById(id).get();
+			if(tnoticesOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(tnoticesOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//title
 			if(data.containsKey("title")){
 				String title = data.get("title").toString();
-				tnoticesOptional.get().setTitle(title);
+				tnoticesOptional.setTitle(title);
 			}
 			//description
 			if(data.containsKey("description")){
 				String description = data.get("description").toString();
-				tnoticesOptional.get().setDescription(description);
+				tnoticesOptional.setDescription(description);
 			}
 			//urlimagen
 			if(data.containsKey("urlimagen")){
 				String urlimagen = data.get("urlimagen").toString();
-				tnoticesOptional.get().setUrlimagen(urlimagen);
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				tnoticesOptional.get().setStatus(status);
+				tnoticesOptional.setUrlimagen(urlimagen);
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tnoticesOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tnoticesOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tnoticesOptional.get().setCreatedBy(createdBy);
+				tnoticesOptional.setCreatedBy(createdBy);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				tnoticesOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				tnoticesOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				tnoticesOptional.get().setModifiedBy(modifiedBy);
+				tnoticesOptional.setModifiedBy(modifiedBy);
 			}
-			tnoticesRepository.save(tnoticesOptional.get());
+			tnoticesRepository.save(tnoticesOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

@@ -1,7 +1,6 @@
 package com.integrador.sicdet.config;
 
 import com.integrador.sicdet.entity.Turl;
-import com.integrador.sicdet.others.EncryptionClasses;
 import com.integrador.sicdet.repository.TurlRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +30,8 @@ public class SecurityModule implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         String url = request.getRequestURI();
-        //get user-agent
-        String userAgent = request.getHeader("User-Agent");
         //get token
         String token = request.getHeader("Authorization");
-        //get ip
-        String ipAddress = request.getRemoteAddr();
 
         try{
             Turl urlBd = urlRepo.findByUrl(url);

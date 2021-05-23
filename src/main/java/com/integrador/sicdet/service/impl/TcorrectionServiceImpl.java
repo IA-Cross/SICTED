@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -45,56 +46,53 @@ public class TcorrectionServiceImpl implements TcorrectionService{
 
 		LOGGER.debug(">>>> update->id: {}, tcorrection: {}",id,data);
 		try{
-			Optional<Tcorrection> tcorrectionOptional = tcorrectionRepository.findById(id);
-			if(!tcorrectionOptional.isPresent()){
-				throw new Exception("No existe el registro"
-				);
+			Tcorrection tcorrectionOptional = tcorrectionRepository.findById(id).get();
+			if(tcorrectionOptional == null){
+				throw new Exception("No existe el registro");
+			}
+			if(tcorrectionOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//idTesis
 			if(data.containsKey("idTesis")){
-				tcorrectionOptional.get().setIdTesis(new Ttesis());
-				tcorrectionOptional.get().getIdTesis().setId((Integer)data.get("idTesis"));
+				tcorrectionOptional.setIdTesis(new Ttesis());
+				tcorrectionOptional.getIdTesis().setId((Integer)data.get("idTesis"));
 			}
 			//description
 			if(data.containsKey("description")){
 				String description = data.get("description").toString();
-				tcorrectionOptional.get().setDescription(description);
+				tcorrectionOptional.setDescription(description);
 			}
 			//date
 			if(data.containsKey("date")){
 				Date date = (Date)data.get("date");
-				tcorrectionOptional.get().setDate(date);
+				tcorrectionOptional.setDate(date);
 			}
 			//text
 			if(data.containsKey("text")){
-				tcorrectionOptional.get().setText(data.get("text").toString());
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				tcorrectionOptional.get().setStatus(status);
+				tcorrectionOptional.setText(data.get("text").toString());
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tcorrectionOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tcorrectionOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tcorrectionOptional.get().setCreatedBy(createdBy);
+				tcorrectionOptional.setCreatedBy(createdBy);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				tcorrectionOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				tcorrectionOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				tcorrectionOptional.get().setModifiedBy(modifiedBy);
+				tcorrectionOptional.setModifiedBy(modifiedBy);
 			}
-			tcorrectionRepository.save(tcorrectionOptional.get());
+			tcorrectionRepository.save(tcorrectionOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
