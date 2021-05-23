@@ -28,6 +28,7 @@ public class TcorrectionDatesServiceImpl implements TcorrectionDatesService{
 	public void insert(TcorrectionDates tcorrectionDates ) throws Exception{
 		LOGGER.debug(">>>Insert()->tcorrectionDates:{}",tcorrectionDates);
 		try{
+			tcorrectionDates.setId(0);
 			tcorrectionDates.setCreatedAt(new Date());
 			tcorrectionDates.setModifiedAt(new Date());
 			tcorrectionDates.setCreatedBy(1);

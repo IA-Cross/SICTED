@@ -101,7 +101,7 @@ public class TuserServiceImpl implements TuserService{
 	}
 	@Override
 	public void delete(Integer id) throws Exception{
-		LOGGER.debug(">>>> delete->id: {}",id);
+		LOGGER.debug(">>>> delete->id: {}", id);
 		try{
 			Tuser tuserOptional = tuserRepository.findById(id).get();
 			if(tuserOptional == null){
@@ -119,7 +119,7 @@ public class TuserServiceImpl implements TuserService{
 	}
 	@Override
 	public List<TuserWithRolesFormat> findAll(int page, int size) throws Exception{
-		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
+		LOGGER.debug(">>>> findAll <<<< page: {} size: {}", page, size);
 		List<Tuser>tuserList=null;
 		List<TuserWithRolesFormat>users= new ArrayList<>();
 		List<Tuserrole> userRoles = null;
