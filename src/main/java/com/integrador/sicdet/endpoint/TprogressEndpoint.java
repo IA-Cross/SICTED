@@ -36,8 +36,8 @@ public class TprogressEndpoint{
 	return response;
 	}
 
-	@PostMapping("/update/{id}")
-	public ResponseEntity<ResponseBody<Void>> update(@PathVariable Integer id, @RequestBody Map<String,Object> data){
+	@PostMapping("/update")
+	public ResponseEntity<ResponseBody<Void>> update(@RequestParam("id") int id, @RequestBody Map<String,Object> data){
 		LOGGER.debug(">>>> update->id: {}, tprogress: {}",id,data);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -49,8 +49,8 @@ public class TprogressEndpoint{
 	return response;
 	}
 
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<ResponseBody<Void>> delete(@PathVariable Integer id){
+	@GetMapping("/delete")
+	public ResponseEntity<ResponseBody<Void>> delete(@RequestParam("id") int id){
 		LOGGER.debug(">>>> delete->id: {}",id);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -72,6 +72,19 @@ public class TprogressEndpoint{
 			response=Utils.<List<Tprogress>>response(HttpStatus.OK,"Lista encontrada",tprogressList);
 		}catch (Exception e){
 			response=Utils.<List<Tprogress>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tprogressList);
+		}
+		return response;
+	}
+	
+	@GetMapping("/findAllByIdTesis")
+	public ResponseEntity<ResponseBody<List<Tprogress>>> findAllByIdTesis(@RequestParam("idTesis") int idTesis){
+		ResponseEntity<ResponseBody<List<Tprogress>>> response = null;
+		List<Tprogress> tprogressList = null;
+		try {
+			tprogressList = tprogressService.findAllByIdTesis(idTesis);
+			response = Utils.<List<Tprogress>>response(HttpStatus.OK,"Lista encontrada",tprogressList);
+		} catch (Exception e) {
+			response = Utils.<List<Tprogress>>response(HttpStatus.NOT_FOUND,"Lista no encontrada",tprogressList);
 		}
 		return response;
 	}

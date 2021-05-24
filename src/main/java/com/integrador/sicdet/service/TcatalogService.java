@@ -7,4 +7,5 @@ public interface TcatalogService{
 	void update(Integer id, Map<String,Object> data) throws Exception;
 	void delete(Integer id) throws Exception;
 	List<Tcatalog> findAll(int page,int size) throws Exception;
+	List<Tcatalog> findCatalogByCode(String catalog) throws Exception;
 }

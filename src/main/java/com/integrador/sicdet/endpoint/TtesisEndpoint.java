@@ -1,5 +1,6 @@
 package com.integrador.sicdet.endpoint;
 
+import com.integrador.sicdet.entity.TesisCardFormat;
 import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.service.TtesisService;
 import com.integrador.sicdet.config.ResponseBody;
@@ -36,8 +37,8 @@ public class TtesisEndpoint{
 	return response;
 	}
 
-	@PostMapping("/update/{id}")
-	public ResponseEntity<ResponseBody<Void>> update(@PathVariable Integer id, @RequestBody Map<String,Object> data){
+	@PostMapping("/update")
+	public ResponseEntity<ResponseBody<Void>> update(@RequestParam("id") int id, @RequestBody Map<String,Object> data){
 		LOGGER.debug(">>>> update->id: {}, ttesis: {}",id,data);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -49,8 +50,8 @@ public class TtesisEndpoint{
 	return response;
 	}
 
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<ResponseBody<Void>> delete(@PathVariable Integer id){
+	@GetMapping("/delete")
+	public ResponseEntity<ResponseBody<Void>> delete(@RequestParam("id") int id){
 		LOGGER.debug(">>>> delete->id: {}",id);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -76,7 +77,7 @@ public class TtesisEndpoint{
 		return response;
 	}
 
-	@GetMapping("/searchTesis")
+	@PostMapping("/searchTesis")
 	public ResponseEntity<ResponseBody<List<Ttesis>>>searchTesis(@RequestParam("page") int page,@RequestParam("size") int size, @RequestBody Map<String,Object> data){
 		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
 
@@ -87,6 +88,64 @@ public class TtesisEndpoint{
 			response=Utils.<List<Ttesis>>response(HttpStatus.OK,"Lista encontrada",ttesisList);
 		}catch (Exception e){
 			response=Utils.<List<Ttesis>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesisList);
+		}
+		return response;
+	}
+
+	@GetMapping("/findAllCardFormat")
+	public ResponseEntity<ResponseBody<List<TesisCardFormat>>> findAllCardFormat(){
+		LOGGER.debug(">>>> findAll <<<<");
+		ResponseEntity<ResponseBody<List<TesisCardFormat>>> response=null;
+		List<TesisCardFormat>ttesisList=null;
+		try{
+			ttesisList=ttesisService.findAllCardFormat();
+			response=Utils.<List<TesisCardFormat>>response(HttpStatus.OK,"Lista encontrada",ttesisList);
+		}catch (Exception e){
+			response=Utils.<List<TesisCardFormat>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesisList);
+		}
+		return response;
+	}
+	
+	@GetMapping("/findById")
+	public ResponseEntity<ResponseBody<Ttesis>> findById(@RequestParam Map<String,String>params){
+		LOGGER.debug(">>>> findById <<<<");
+		ResponseEntity<ResponseBody<Ttesis>> response = null;
+		Ttesis tesis = null;
+		try {
+			int id = Integer.parseInt(params.get("id"));
+			tesis = ttesisService.findById(id);
+			response = Utils.<Ttesis>response(HttpStatus.OK,"Tesis encontrada",tesis);
+		} catch (Exception e){
+			response = Utils.<Ttesis>response(HttpStatus.NOT_FOUND,"Tesis encontrada",tesis);
+		}
+		return response;
+	}
+	
+	@GetMapping("/searchTesisByTitle")
+	public ResponseEntity<ResponseBody<Ttesis>> searchTesisByTitle(@RequestParam Map<String,String>params){
+		LOGGER.debug(">>>> findById <<<<");
+		ResponseEntity<ResponseBody<Ttesis>> response = null;
+		Ttesis tesis = null;
+		try {
+			String titulo = params.get("titulo");
+			tesis = ttesisService.searchTesisByTitle(titulo);
+			response = Utils.<Ttesis>response(HttpStatus.OK,"Tesis encontrada",tesis);
+		} catch (Exception e){
+			response = Utils.<Ttesis>response(HttpStatus.NOT_FOUND,"Tesis no encontrada",tesis);
+		}
+		return response;
+	}
+
+	@GetMapping("/findAdvisedTesis")
+	public ResponseEntity<ResponseBody<List<Ttesis>>> findAdvisedTesis(@RequestParam("idAsesor") int idAsesor){
+		LOGGER.debug(">>>> findById <<<<");
+		ResponseEntity<ResponseBody<List<Ttesis>>> response = null;
+		List<Ttesis> tesis = null;
+		try {
+			tesis = ttesisService.findAdvisedTesis(idAsesor);
+			response = Utils.<List<Ttesis>>response(HttpStatus.OK,"Tesis encontrada",tesis);
+		} catch (Exception e){
+			response = Utils.<List<Ttesis>>response(HttpStatus.NOT_FOUND,"Tesis no encontrada",tesis);
 		}
 		return response;
 	}

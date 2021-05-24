@@ -6,11 +6,9 @@ import com.utilssected.sected.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import com.utilssected.sected.utils.ResponseBody;
@@ -40,21 +38,20 @@ public class LoginEndpoint {
     }
 
 
-    /*@GetMapping("/login")
-    public ResponseEntity<ResponseBody<UserToken>> createToken(@RequestParam Map<String,String> params, @RequestHeader Map<String, String> headers){
-        System.out.println("Login contoller");
-        ResponseEntity<ResponseBody<UserToken>> res = null;
+    @PostMapping("/recover")
+    public ResponseEntity<ResponseBody<Void>> insert(@RequestParam Map<String,String>params){
+        ResponseEntity<ResponseBody<Void>>res=null;
+        LOG.info("<<<Recover Password by Email>>>");
 
-        UserToken userToken = new UserToken();
         try {
-            userToken = loginService.createToken(params, headers);
-            //res = new ResponseEntity<>(userToken, HttpStatus.OK);
-            res= Utils.response200OK(userToken);
+            String mail = params.get("email");
+            loginService.recoverPassword(mail);
+            res = new ResponseEntity<>(HttpStatus.OK);
         }catch(Exception e) {
-            //res = new ResponseEntity<>(userToken, HttpStatus.BAD_REQUEST);
-            res= Utils.handle(e, "Error");
+            res = new ResponseEntity<>(HttpStatus.METHOD_FAILURE);
         }
-        //token = loginService.createToken(params, headers);
+
+
         return res;
-    }*/
+    }
 }

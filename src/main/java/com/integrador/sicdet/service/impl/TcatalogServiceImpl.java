@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -27,6 +28,12 @@ public class TcatalogServiceImpl implements TcatalogService{
 	public void insert(Tcatalog tcatalog ) throws Exception{
 		LOGGER.debug(">>>Insert()->tcatalog:{}",tcatalog);
 		try{
+			tcatalog.setCreatedAt(new Date());
+			tcatalog.setModifiedAt(new Date());
+			tcatalog.setCreatedBy(1);
+			tcatalog.setModifiedBy(1);
+			tcatalog.setStatus(1);
+			LOGGER.debug(">>>Insert()->tcatalog:{}",tcatalog);
 			tcatalogRepository.save(tcatalog);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
@@ -38,51 +45,49 @@ public class TcatalogServiceImpl implements TcatalogService{
 
 		LOGGER.debug(">>>> update->id: {}, tcatalog: {}",id,data);
 		try{
-			Optional<Tcatalog> tcatalogOptional = tcatalogRepository.findById(id);
-			if(!tcatalogOptional.isPresent()){
+			Tcatalog tcatalogOptional = tcatalogRepository.findById(id).get();
+			if(tcatalogOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(tcatalogOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//catalog
 			if(data.containsKey("catalog")){
 				String catalog = data.get("catalog").toString();
-				tcatalogOptional.get().setCatalog(catalog);
+				tcatalogOptional.setCatalog(catalog);
 			}
 			//code
 			if(data.containsKey("code")){
 				String code = data.get("code").toString();
-				tcatalogOptional.get().setCode(code);
+				tcatalogOptional.setCode(code);
 			}
 			//description
 			if(data.containsKey("description")){
 				String description = data.get("description").toString();
-				tcatalogOptional.get().setDescription(description);
+				tcatalogOptional.setDescription(description);
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tcatalogOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tcatalogOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tcatalogOptional.get().setCreatedBy(createdBy);
+				tcatalogOptional.setCreatedBy(createdBy);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				tcatalogOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				tcatalogOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				tcatalogOptional.get().setModifiedBy(modifiedBy);
+				tcatalogOptional.setModifiedBy(modifiedBy);
 			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				tcatalogOptional.get().setStatus(status);
-			}
-			tcatalogRepository.save(tcatalogOptional.get());
+			tcatalogRepository.save(tcatalogOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -92,11 +97,15 @@ public class TcatalogServiceImpl implements TcatalogService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tcatalog> tcatalogOptional = tcatalogRepository.findById(id);
-			if(!tcatalogOptional.isPresent()){
+			Tcatalog tcatalogOptional = tcatalogRepository.findById(id).get();
+			if(tcatalogOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tcatalogRepository.delete(tcatalogOptional.get());
+			if(tcatalogOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tcatalogOptional.setStatus(0);
+			tcatalogRepository.save(tcatalogOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -114,6 +123,20 @@ public class TcatalogServiceImpl implements TcatalogService{
 			throw new Exception(e);
 		}
 		LOGGER.debug(">>>> findAll <<<< tcatalogList: {}",tcatalogList);
+		return tcatalogList;
+	}
+	
+	@Override
+	public List<Tcatalog> findCatalogByCode(String code) throws Exception {
+		LOGGER.debug(">>>> findCatalogByCode <<<< catalog: {}",code);
+		List<Tcatalog>tcatalogList=null;
+		try {
+			tcatalogList = tcatalogRepository.findCatalogByCode(code);
+		} catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+		LOGGER.debug(">>>> findCatalogByCode <<<< tcatalogList: {}",tcatalogList);
 		return tcatalogList;
 	}
 

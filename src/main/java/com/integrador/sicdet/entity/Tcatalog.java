@@ -2,6 +2,8 @@ package com.integrador.sicdet.entity;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +14,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Date;
 @Entity
 @Table(name= "tcatalog")
+@NamedQueries({
+    @NamedQuery(name = "Tcatalog.findDegree",query = "select c from Tcatalog c where c.status=1 and c.catalog='degree'"),
+    @NamedQuery(name = "Tcatalog.findCatalogByCode", query = "select c from Tcatalog c where c.status = 1 and (c.code = :code) order by c.id")
+})
 public class Tcatalog implements Serializable{ 
 
 	@Id

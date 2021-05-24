@@ -1,30 +1,34 @@
 package com.integrador.sicdet.entity;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
 @Entity
 @Table(name= "tuser")
+@NamedQueries({
+		@NamedQuery(name = "Tuser.findByEmail",query = "select u from Tuser u where u.status=1 and u.email=:email"),
+		@NamedQuery(name="Tuser.searchByName",query = "select u from Tuser u where u.status=1 and (u.email like :name)"),
+		@NamedQuery(name = "Tuser.findAllActive",query = "select u from Tuser u where u.status=1")
+})
 public class Tuser implements Serializable{ 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	private Integer idperson;
+	@ManyToOne
+	@JoinColumn(name = "idperson",referencedColumnName = "id")
+	private Tperson idperson;
 	@Column(name = "email")
 	private String email;
 	@Column(name = "password")
 	private String password;
 	@Column(name = "status")
 	private Integer status;
+	private String token;
 	@Column(name = "created_at")
 	private Date createdAt;
 	@Column(name = "created_by")
@@ -42,13 +46,9 @@ public class Tuser implements Serializable{
 		  this.id=id;
 	}
 
-	public Integer getIdperson(){
-		 return idperson;
-	}
+	public Tperson getIdperson() { return idperson; }
 
-	public void setIdperson(Integer idperson){
-		  this.idperson=idperson;
-	}
+	public void setIdperson(Tperson idperson) { this.idperson = idperson; }
 
 	public String getEmail(){
 		 return email;
@@ -105,6 +105,10 @@ public class Tuser implements Serializable{
 	public void setModifiedBy(Integer modifiedBy){
 		  this.modifiedBy=modifiedBy;
 	}
+
+	public String getToken() { return token; }
+
+	public void setToken(String token) { this.token = token; }
 
 	@Override
 	public String toString() {

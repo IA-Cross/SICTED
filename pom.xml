@@ -42,6 +42,13 @@
 			</exclusions>
 		</dependency>
 
+		<!-- Dependencia para enviar correos -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
 		<!-- Dependencias de seguridad -->
 		<dependency>
 			<groupId>org.json</groupId>

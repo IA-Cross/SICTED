@@ -11,4 +11,5 @@ public interface LoginService {
 
     UserToken createToken(@RequestParam Map<String,String>params, @RequestHeader Map<String, String> headers) throws AppException;
 
+    void recoverPassword(String correo) throws AppException;
 }

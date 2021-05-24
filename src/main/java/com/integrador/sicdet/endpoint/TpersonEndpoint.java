@@ -36,8 +36,8 @@ public class TpersonEndpoint{
 	return response;
 	}
 
-	@PostMapping("/update/{id}")
-	public ResponseEntity<ResponseBody<Void>> update(@PathVariable Integer id, @RequestBody Map<String,Object> data){
+	@PostMapping("/update")
+	public ResponseEntity<ResponseBody<Void>> update(@RequestParam("id") int id, @RequestBody Map<String,Object> data){
 		LOGGER.debug(">>>> update->id: {}, tperson: {}",id,data);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -49,8 +49,8 @@ public class TpersonEndpoint{
 	return response;
 	}
 
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<ResponseBody<Void>> delete(@PathVariable Integer id){
+	@GetMapping("/delete")
+	public ResponseEntity<ResponseBody<Void>> delete(@RequestParam("id") int id){
 		LOGGER.debug(">>>> delete->id: {}",id);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -76,4 +76,34 @@ public class TpersonEndpoint{
 		}
 		return response;
 	}
+
+
+	@GetMapping("/searchUsersByName")
+	public ResponseEntity<ResponseBody<List<Tperson>>>searchUser(@RequestParam("name") String name){
+		LOGGER.debug(">>>>>>searchUser<<<<<< name: {}", name);
+		List<Tperson> person = null;
+		ResponseEntity<ResponseBody<List<Tperson>>> response = null;
+		try {
+			person = tpersonService.searchPerson(name);
+			response = Utils.<List<Tperson>>response(HttpStatus.OK,"Usuario encontrado",person);
+		}catch(Exception e){
+			response= Utils.<List<Tperson>>response(HttpStatus.NOT_FOUND,"Usuario no encontrado", person);
+		}
+		return response;
+	}
+
+	@GetMapping("/personsWithoutUser")
+	public ResponseEntity<ResponseBody<List<Tperson>>>personsWithoutUser(){
+		LOGGER.debug(">>>>>>searchPersons<<<<<<");
+		List<Tperson> person = null;
+		ResponseEntity<ResponseBody<List<Tperson>>> response = null;
+		try {
+			person = tpersonService.personsWithoutUser();
+			response = Utils.<List<Tperson>>response(HttpStatus.OK,"Personas encontradas",person);
+		}catch(Exception e){
+			response= Utils.<List<Tperson>>response(HttpStatus.NOT_FOUND,"No se encontro", person);
+		}
+		return response;
+	}
+
 }

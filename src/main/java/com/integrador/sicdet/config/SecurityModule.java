@@ -1,7 +1,6 @@
 package com.integrador.sicdet.config;
 
 import com.integrador.sicdet.entity.Turl;
-import com.integrador.sicdet.others.EncryptionClasses;
 import com.integrador.sicdet.repository.TurlRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,18 +17,21 @@ public class SecurityModule implements HandlerInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityModule.class);
 
     @Autowired
+    private CorsConfiguration corsConfiguration;
+    @Autowired
     private TurlRepository urlRepo;
+
+    @Bean
+    CorsConfiguration corsFilter() {
+        return corsConfiguration;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         String url = request.getRequestURI();
-        //get user-agent
-        String userAgent = request.getHeader("User-Agent");
         //get token
         String token = request.getHeader("Authorization");
-        //get ip
-        String ipAddress = request.getRemoteAddr();
 
         try{
             Turl urlBd = urlRepo.findByUrl(url);
@@ -51,18 +53,11 @@ public class SecurityModule implements HandlerInterceptor {
                 response.setStatus(400);
                 return false;
             }
-
-
-
-
-
         }catch (Exception e){
-            LOG.error(">>> Corrupt Credentials <<<");
+            LOG.error(">>> Corrupt Credentials <<< error:{}",e);
             response.setStatus(400);
             return false;
         }
-
-
         return true;
     }
 

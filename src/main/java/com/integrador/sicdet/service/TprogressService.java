@@ -7,4 +7,5 @@ public interface TprogressService{
 	void update(Integer id, Map<String,Object> data) throws Exception;
 	void delete(Integer id) throws Exception;
 	List<Tprogress> findAll(int page,int size) throws Exception;
+	List<Tprogress> findAllByIdTesis (int idTesis) throws Exception;
 }

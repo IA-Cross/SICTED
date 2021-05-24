@@ -36,8 +36,8 @@ public class TdownloadlogEndpoint{
 	return response;
 	}
 
-	@PostMapping("/update/{id}")
-	public ResponseEntity<ResponseBody<Void>> update(@PathVariable Integer id, @RequestBody Map<String,Object> data){
+	@PostMapping("/update")
+	public ResponseEntity<ResponseBody<Void>> update(@RequestParam("id") int id, @RequestBody Map<String,Object> data){
 		LOGGER.debug(">>>> update->id: {}, tdownloadlog: {}",id,data);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -45,19 +45,6 @@ public class TdownloadlogEndpoint{
 			response= Utils.<Void>response(HttpStatus.OK,"Se actualizo el registro",null);
 		}catch (Exception e){
 			response=Utils.<Void>response(HttpStatus.BAD_REQUEST,false,"No se puedo actualizar el registro",null);
-		}
-	return response;
-	}
-
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<ResponseBody<Void>> delete(@PathVariable Integer id){
-		LOGGER.debug(">>>> delete->id: {}",id);
-		ResponseEntity<ResponseBody<Void>> response=null;
-		try{
-			tdownloadlogService.delete(id);
-			response= Utils.<Void>response(HttpStatus.OK,"Se elimino el registro",null);
-		}catch (Exception e){
-			response=Utils.<Void>response(HttpStatus.BAD_REQUEST,false,"No se puedo eliminar el registro",null);
 		}
 	return response;
 	}

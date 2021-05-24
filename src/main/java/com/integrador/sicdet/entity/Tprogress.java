@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Date;
 @Entity
 @Table(name= "tprogress")
+@NamedQueries({
+	@NamedQuery(name = "Tprogress.findAllByIdTesis", query="select tp from Tprogress tp where tp.status=1 and (tp.ttesisId.id=:idTesis) order by tp.createdAt")
+})
 public class Tprogress implements Serializable{ 
 
 	@Id

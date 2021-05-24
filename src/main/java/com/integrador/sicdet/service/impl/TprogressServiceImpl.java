@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -28,6 +29,13 @@ public class TprogressServiceImpl implements TprogressService{
 	public void insert(Tprogress tprogress ) throws Exception{
 		LOGGER.debug(">>>Insert()->tprogress:{}",tprogress);
 		try{
+			tprogress.setId(0);
+			tprogress.setCreatedAt(new Date());
+			tprogress.setModifiedAt(new Date());
+			tprogress.setCreatedBy(1);
+			tprogress.setModifiedBy(1);
+			tprogress.setStatus(1);
+			LOGGER.debug(">>>Insert()->tprogress:{}",tprogress);
 			tprogressRepository.save(tprogress);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
@@ -39,56 +47,54 @@ public class TprogressServiceImpl implements TprogressService{
 
 		LOGGER.debug(">>>> update->id: {}, tprogress: {}",id,data);
 		try{
-			Optional<Tprogress> tprogressOptional = tprogressRepository.findById(id);
-			if(!tprogressOptional.isPresent()){
+			Tprogress tprogressOptional = tprogressRepository.findById(id).get();
+			if(tprogressOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(tprogressOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//ttesisId
 			if(data.containsKey("ttesisId")){
-				tprogressOptional.get().setTtesisId(new Ttesis());
-				tprogressOptional.get().getTtesisId().setId((Integer)data.get("ttesisId"));
+				tprogressOptional.setTtesisId(new Ttesis());
+				tprogressOptional.getTtesisId().setId((Integer)data.get("ttesisId"));
 			}
 			//progress
 			if(data.containsKey("progress")){
 				Integer progress = (Integer)data.get("progress");
-				tprogressOptional.get().setProgress(progress);
+				tprogressOptional.setProgress(progress);
 			}
 			//description
 			if(data.containsKey("description")){
 				String description = data.get("description").toString();
-				tprogressOptional.get().setDescription(description);
+				tprogressOptional.setDescription(description);
 			}
 			//isVerified
 			if(data.containsKey("isVerified")){
 				Integer isVerified = (Integer)data.get("isVerified");
-				tprogressOptional.get().setIsVerified(isVerified);
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				tprogressOptional.get().setStatus(status);
+				tprogressOptional.setIsVerified(isVerified);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				tprogressOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				tprogressOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				tprogressOptional.get().setModifiedBy(modifiedBy);
+				tprogressOptional.setModifiedBy(modifiedBy);
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tprogressOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tprogressOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tprogressOptional.get().setCreatedBy(createdBy);
+				tprogressOptional.setCreatedBy(createdBy);
 			}
-			tprogressRepository.save(tprogressOptional.get());
+			tprogressRepository.save(tprogressOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -98,11 +104,15 @@ public class TprogressServiceImpl implements TprogressService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tprogress> tprogressOptional = tprogressRepository.findById(id);
-			if(!tprogressOptional.isPresent()){
+			Tprogress tprogressOptional = tprogressRepository.findById(id).get();
+			if(tprogressOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tprogressRepository.delete(tprogressOptional.get());
+			if(tprogressOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tprogressOptional.setStatus(0);
+			tprogressRepository.save(tprogressOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -122,5 +132,20 @@ public class TprogressServiceImpl implements TprogressService{
 		LOGGER.debug(">>>> findAll <<<< tprogressList: {}",tprogressList);
 		return tprogressList;
 	}
+	@Override
+	public List<Tprogress> findAllByIdTesis(int idTesis) throws Exception {
+		LOGGER.debug(">>>> findAllByIdTesis <<<< idTesis: {}",idTesis);
+		List<Tprogress> tprogressList = null;
+		try {
+			tprogressList = tprogressRepository.findAllByIdTesis(idTesis);
+		} catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+		LOGGER.debug(">>>> findAllByIdTesis <<<< tprogressList: {}", tprogressList);
+		return tprogressList;
+	}
+	
+	
 
 }

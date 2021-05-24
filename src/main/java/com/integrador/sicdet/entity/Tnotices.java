@@ -1,17 +1,16 @@
 package com.integrador.sicdet.entity;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
 @Entity
 @Table(name= "tnotices")
+@NamedQueries({
+		@NamedQuery(name="Tnotices.findAllActive",query = "select u from Tnotices u where u.status=1")
+})
 public class Tnotices implements Serializable{ 
 
 	@Id
