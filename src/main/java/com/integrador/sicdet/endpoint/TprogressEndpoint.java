@@ -75,4 +75,17 @@ public class TprogressEndpoint{
 		}
 		return response;
 	}
+	
+	@GetMapping("/findAllByIdTesis")
+	public ResponseEntity<ResponseBody<List<Tprogress>>> findAllByIdTesis(@RequestParam("idTesis") int idTesis){
+		ResponseEntity<ResponseBody<List<Tprogress>>> response = null;
+		List<Tprogress> tprogressList = null;
+		try {
+			tprogressList = tprogressService.findAllByIdTesis(idTesis);
+			response = Utils.<List<Tprogress>>response(HttpStatus.OK,"Lista encontrada",tprogressList);
+		} catch (Exception e) {
+			response = Utils.<List<Tprogress>>response(HttpStatus.NOT_FOUND,"Lista no encontrada",tprogressList);
+		}
+		return response;
+	}
 }

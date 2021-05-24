@@ -29,6 +29,7 @@ public class TprogressServiceImpl implements TprogressService{
 	public void insert(Tprogress tprogress ) throws Exception{
 		LOGGER.debug(">>>Insert()->tprogress:{}",tprogress);
 		try{
+			tprogress.setId(0);
 			tprogress.setCreatedAt(new Date());
 			tprogress.setModifiedAt(new Date());
 			tprogress.setCreatedBy(1);
@@ -131,5 +132,20 @@ public class TprogressServiceImpl implements TprogressService{
 		LOGGER.debug(">>>> findAll <<<< tprogressList: {}",tprogressList);
 		return tprogressList;
 	}
+	@Override
+	public List<Tprogress> findAllByIdTesis(int idTesis) throws Exception {
+		LOGGER.debug(">>>> findAllByIdTesis <<<< idTesis: {}",idTesis);
+		List<Tprogress> tprogressList = null;
+		try {
+			tprogressList = tprogressRepository.findAllByIdTesis(idTesis);
+		} catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+		LOGGER.debug(">>>> findAllByIdTesis <<<< tprogressList: {}", tprogressList);
+		return tprogressList;
+	}
+	
+	
 
 }

@@ -71,7 +71,7 @@ public class TcatalogEndpoint{
 			tcatalogList=tcatalogService.findAll(page,size);
 			response=Utils.<List<Tcatalog>>response(HttpStatus.OK,"Lista encontrada",tcatalogList);
 		}catch (Exception e){
-			response=Utils.<List<Tcatalog>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tcatalogList);
+			response=Utils.<List<Tcatalog>>response(HttpStatus.NOT_FOUND,"Lista no encontrada",tcatalogList);
 		}
 		return response;
 	}
@@ -86,7 +86,7 @@ public class TcatalogEndpoint{
 			tcatalogList=tcatalogService.findCatalogByCode(code);
 			response=Utils.<List<Tcatalog>>response(HttpStatus.OK,"Lista encontrada",tcatalogList);
 		}catch (Exception e){
-			response=Utils.<List<Tcatalog>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tcatalogList);
+			response=Utils.<List<Tcatalog>>response(HttpStatus.NOT_FOUND,"Lista no encontrada",tcatalogList);
 		}
 		return response;
 	}
