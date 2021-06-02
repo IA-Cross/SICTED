@@ -30,13 +30,14 @@ public class TpersonServiceImpl implements TpersonService{
 	@Override
 	public void insert(Tperson tperson ) throws Exception{
 		try{
-		tperson.setCreatedAt(new Date());
-		tperson.setModifiedAt(new Date());
-		tperson.setCreatedBy(1);
-		tperson.setModifiedBy(1);
-		tperson.setStatus(1);
-		LOGGER.debug(">>>Insert()->tperson:{}",tperson);
-		tpersonRepository.save(tperson);
+			tperson.setId(0);
+			tperson.setCreatedAt(new Date());
+			tperson.setModifiedAt(new Date());
+			tperson.setCreatedBy(1);
+			tperson.setModifiedBy(1);
+			tperson.setStatus(1);
+			LOGGER.debug(">>>Insert()->tperson:{}",tperson);
+			tpersonRepository.save(tperson);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
