@@ -130,11 +130,14 @@ public class TtesisEndpoint{
 	
 	@GetMapping("/searchTesisByTitle")
 	public ResponseEntity<ResponseBody<Ttesis>> searchTesisByTitle(@RequestParam Map<String,String>params){
-		LOGGER.debug(">>>> findById <<<<");
+		LOGGER.debug(">>>> searchTesisByTitle <<<<");
 		ResponseEntity<ResponseBody<Ttesis>> response = null;
 		Ttesis tesis = null;
 		try {
 			String titulo = params.get("titulo");
+			titulo=titulo.replace("%C3%B3", "ó");
+			titulo=titulo.replace("+", " ");
+			LOGGER.debug("titutlo: {}", titulo);
 			tesis = ttesisService.searchTesisByTitle(titulo);
 			response = Utils.<Ttesis>response(HttpStatus.OK,"Tesis encontrada",tesis);
 		} catch (Exception e){
