@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TprogressRepository extends JpaRepository<Tprogress,Integer>{
 	List<Tprogress> findAllByIdTesis (int idTesis);
+	Tprogress findProgressFinal(int idTesis);
 }

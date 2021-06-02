@@ -42,6 +42,26 @@ public class TtesisServiceImpl implements TtesisService{
 			throw new Exception(e);
 		}
 	}
+	
+	@Override
+	public void updateUrl(Integer id, String url) throws Exception{
+		LOGGER.debug(">>>> update->id: {}, ttesis: {}",id,url);
+		try{
+			Ttesis ttesisOptional = ttesisRepository.findById(id).get();
+			if(ttesisOptional == null){
+				throw new Exception("No existe el registro");
+			}
+			if(ttesisOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			ttesisOptional.setUrl(url);
+			ttesisRepository.save(ttesisOptional);
+		}catch (Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+	}
+	
 	@Override
 	public void update(Integer id, Map<String,Object> data) throws Exception{
 

@@ -3,14 +3,21 @@ package com.integrador.sicdet.endpoint;
 import com.integrador.sicdet.entity.TesisCardFormat;
 import com.integrador.sicdet.entity.Ttesis;
 import com.integrador.sicdet.service.TtesisService;
+import com.integrador.sicdet.uploadfile.utils.FileManage;
 import com.integrador.sicdet.config.ResponseBody;
 import com.integrador.sicdet.config.Utils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Map;
 import java.util.List;
 @RestController
@@ -146,6 +153,21 @@ public class TtesisEndpoint{
 			response = Utils.<List<Ttesis>>response(HttpStatus.OK,"Tesis encontrada",tesis);
 		} catch (Exception e){
 			response = Utils.<List<Ttesis>>response(HttpStatus.NOT_FOUND,"Tesis no encontrada",tesis);
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/uploadtesis", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResponseBody<Void>>  myService(@RequestParam("idTesis") int idTesis, @RequestParam("file") MultipartFile file) throws Exception {
+		ResponseEntity<ResponseBody<Void>> response=null;
+		try {
+			if (!file.isEmpty()) {
+				FileManage.saveFile("tmp" + FileManage.obtenerSeparadorRutaPorServidor(), file.getOriginalFilename(),
+					file.getInputStream());
+				ttesisService.updateUrl(idTesis, FileManage.obtenerRutaPorServidor() + "tmp" + FileManage.obtenerSeparadorRutaPorServidor() + file.getOriginalFilename());
+			}
+		}catch (Exception e){
+			response=Utils.<Void>response(HttpStatus.BAD_REQUEST,false,"No se pudo subir el archivo",null);
 		}
 		return response;
 	}

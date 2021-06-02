@@ -13,4 +13,5 @@ public interface TtesisService{
 	Ttesis findById(int id) throws Exception;
 	Ttesis searchTesisByTitle(String titulo) throws Exception;
 	List<Ttesis> findAdvisedTesis (int id);
+	void updateUrl(Integer id, String url) throws Exception;
 }

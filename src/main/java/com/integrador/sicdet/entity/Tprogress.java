@@ -9,7 +9,8 @@ import java.util.Date;
 @Entity
 @Table(name= "tprogress")
 @NamedQueries({
-	@NamedQuery(name = "Tprogress.findAllByIdTesis", query="select tp from Tprogress tp where tp.status=1 and (tp.ttesisId.id=:idTesis) order by tp.createdAt")
+	@NamedQuery(name = "Tprogress.findAllByIdTesis", query="select tp from Tprogress tp where tp.status=1 and (tp.ttesisId.id=:idTesis) order by tp.createdAt"),
+	@NamedQuery(name = "Tprogress.findProgressFinal", query="select tp from Tprogress tp where tp.progress = 100 and (tp.ttesisId.id=:idTesis)")
 })
 public class Tprogress implements Serializable{ 
 
