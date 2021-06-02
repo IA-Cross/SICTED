@@ -9,7 +9,7 @@ public interface TtesisService{
 	void delete(Integer id) throws Exception;
 	List<Ttesis> findAll() throws Exception;
 	List<Ttesis> searchTesis(int page,int size,Map<String,Object> data) throws Exception;
-	List<TesisCardFormat> findAllCardFormat() throws Exception;
+	List<Ttesis> findAllCardFormat() throws Exception;
 	Ttesis findById(int id) throws Exception;
 	Ttesis searchTesisByTitle(String titulo) throws Exception;
 	List<Ttesis> findAdvisedTesis (int id);

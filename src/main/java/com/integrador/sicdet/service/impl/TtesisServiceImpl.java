@@ -237,7 +237,7 @@ public class TtesisServiceImpl implements TtesisService{
 	}
 
 	@Override
-	public List<TesisCardFormat> findAllCardFormat() throws Exception {
+	public List<Ttesis> findAllCardFormat() throws Exception {
 		LOGGER.debug(">>>> findAll <<<<");
 		List<Ttesis>ttesisList=null;
 		List<TesisCardFormat> cards= new ArrayList<>();
@@ -245,17 +245,21 @@ public class TtesisServiceImpl implements TtesisService{
 		Ttesista findedTesist = new Ttesista();
 		TesisCardFormat card = null;
 		String name="";
+		List<Ttesis>ttesisListFinal=new ArrayList<>();
 		try{
 			ttesisList = ttesisRepository.findAllActive();
-			for (Ttesis tesis : ttesisList) {
+			/*for (Ttesis tesis : ttesisList) {
 				findedTesist= tesistaRepo.findByIdTesis(tesis.getId());
 				name = findedTesist.getIdPerson().getName()+" "+findedTesist.getIdPerson().getFirstlastname()+" "+findedTesist.getIdPerson().getSecondlastname();
 				card = TesisCardBuilder.fromTesis(tesis, name);
 				cards.add(card);
 			}
 
-			for (int i=0; i<cards.size()&&cardsRes.size()<3;i++){
+			for (int i=0; i<cards.size()&&cardsRes.size()<10;i++){
 				cardsRes.add(cards.get(i));
+			}*/
+			for (int i=0; i<ttesisList.size()&&ttesisListFinal.size()<10;i++){
+				ttesisListFinal.add(ttesisList.get(i));
 			}
 
 		}catch (Exception e){
@@ -263,7 +267,7 @@ public class TtesisServiceImpl implements TtesisService{
 			throw new Exception(e);
 		}
 		LOGGER.debug(">>>> findAll <<<< ttesisList: {}",ttesisList);
-		return cardsRes;
+		return ttesisListFinal;
 	}
 	
 	@Override
