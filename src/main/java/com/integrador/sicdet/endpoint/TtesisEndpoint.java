@@ -100,15 +100,15 @@ public class TtesisEndpoint{
 	}
 
 	@GetMapping("/findAllCardFormat")
-	public ResponseEntity<ResponseBody<List<TesisCardFormat>>> findAllCardFormat(){
+	public ResponseEntity<ResponseBody<List<Ttesis>>> findAllCardFormat(){
 		LOGGER.debug(">>>> findAll <<<<");
-		ResponseEntity<ResponseBody<List<TesisCardFormat>>> response=null;
-		List<TesisCardFormat>ttesisList=null;
+		ResponseEntity<ResponseBody<List<Ttesis>>> response=null;
+		List<Ttesis>ttesisList=null;
 		try{
 			ttesisList=ttesisService.findAllCardFormat();
-			response=Utils.<List<TesisCardFormat>>response(HttpStatus.OK,"Lista encontrada",ttesisList);
+			response=Utils.<List<Ttesis>>response(HttpStatus.OK,"Lista encontrada",ttesisList);
 		}catch (Exception e){
-			response=Utils.<List<TesisCardFormat>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesisList);
+			response=Utils.<List<Ttesis>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesisList);
 		}
 		return response;
 	}
