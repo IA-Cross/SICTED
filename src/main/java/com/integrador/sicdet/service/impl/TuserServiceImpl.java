@@ -1,9 +1,7 @@
 package com.integrador.sicdet.service.impl;
 
 import com.integrador.sicdet.entity.*;
-import com.integrador.sicdet.repository.CroleRepository;
-import com.integrador.sicdet.repository.TuserRepository;
-import com.integrador.sicdet.repository.TuserroleRepository;
+import com.integrador.sicdet.repository.*;
 import com.integrador.sicdet.service.TuserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +26,12 @@ public class TuserServiceImpl implements TuserService{
 	private TuserroleRepository userRole;
 	@Autowired
 	private CroleRepository role;
+	@Autowired
+	private TpersonRepository personRepo;
+	@Autowired
+	private TuserroleRepository roleRepo;
+	@Autowired
+	private TtesistaRepository tesistaRepo;
 
 	@Override
 	public void insert(Tuser tuser ) throws Exception{
@@ -45,6 +49,61 @@ public class TuserServiceImpl implements TuserService{
 			throw new Exception(e);
 		}
 	}
+
+	@Override
+	public void insert2(Map<String, Object> data) throws Exception {
+		Tuser user = new Tuser();
+		Tperson tperson = new Tperson();
+		Tuserrole role = new Tuserrole();
+		Ttesista tesista = new Ttesista();
+		try{
+			tperson.setName(data.get("name").toString());
+			tperson.setFirstlastname(data.get("firstLastName").toString());
+			tperson.setSecondlastname(data.get("secondLastName").toString());
+			tperson.setBirthdate(new Date());
+			tperson.setModifiedBy(1);
+			tperson.setCreatedAt(new Date());
+			tperson.setCreatedBy(1);
+			tperson.setCreatedAt(new Date());
+			tperson.setStatus(1);
+			tperson.setGender(data.get("gender").toString());
+			tperson.setModifiedAt(new Date());
+			personRepo.save(tperson);
+			user.setPassword(data.get("password").toString());
+			user.setEmail(data.get("email").toString());
+			user.setIdperson(tperson);
+			user.setCreatedAt(new Date());
+			user.setModifiedAt(new Date());
+			user.setCreatedBy(1);
+			user.setModifiedBy(1);
+			user.setStatus(1);
+			LOGGER.debug(">>>Insert()->tuser:{}",user);
+			tuserRepository.save(user);
+			role.setIduser(user);
+			role.setIdrol(new Crole());
+			role.getIdrol().setId(7);
+			role.setCreatedAt(new Date());
+			role.setCreatedBy(1);
+			role.setModifiedAt(new Date());
+			role.setModifiedBy(1);
+			role.setStatus(1);
+			roleRepo.save(role);
+			tesista.setIdPerson(tperson);
+			tesista.setEnrollment(data.get("enrrolment").toString());
+			tesista.setIdCatDegree(Integer.parseInt(data.get("idCatDegree").toString()));
+			tesista.setStatus(1);
+			tesista.setModifiedBy(1);
+			tesista.setCreatedBy(1);
+			tesista.setModifiedAt(new Date());
+			tesista.setCreatedAt(new Date());
+			tesistaRepo.save(tesista);
+
+		}catch(Exception e){
+			LOGGER.error("Exception: {}",e);
+			throw new Exception(e);
+		}
+	}
+
 	@Override
 	public void update(Integer id, Map<String,Object> data) throws Exception{
 

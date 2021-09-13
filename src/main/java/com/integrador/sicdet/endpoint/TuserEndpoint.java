@@ -47,9 +47,11 @@ public class TuserEndpoint{
 	}
 	
 	@PostMapping("/insert2")
-	public ResponseEntity<ResponseBody<Void>> insert(){
+	public ResponseEntity<ResponseBody<Void>> insert(@RequestBody Map<String,Object> data){
+
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
+			tuserService.insert2(data);
 			response= Utils.<Void>response(HttpStatus.CREATED,"Se inserto correctamente el usuario",null);
 		}catch (Exception e){
 			response=Utils.<Void>response(HttpStatus.BAD_REQUEST,false,"No se puedo insertar el usuario",null);
