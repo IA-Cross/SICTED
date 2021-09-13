@@ -28,12 +28,13 @@ public class TtesistaServiceImpl implements TtesistaService{
 	@Override
 	public void insert(Ttesista ttesista ) throws Exception{
 		LOGGER.debug(">>>Insert()->ttesista:{}",ttesista);
-		ttesista.setCreatedAt(new Date());
-		ttesista.setModifiedAt(new Date());
-		ttesista.setCreatedBy(1);
-		ttesista.setModifiedBy(1);
-		ttesista.setStatus(1);
 		try{
+			ttesista.setId(0);
+			ttesista.setCreatedAt(new Date());
+			ttesista.setModifiedAt(new Date());
+			ttesista.setCreatedBy(1);
+			ttesista.setModifiedBy(1);
+			ttesista.setStatus(1);
 			ttesistaRepository.save(ttesista);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
