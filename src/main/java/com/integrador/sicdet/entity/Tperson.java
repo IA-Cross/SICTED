@@ -25,7 +25,7 @@ public class Tperson implements Serializable{
 	private String firstlastname;
 	private String secondlastname;
 	@Column(name = "gender")
-	private String gender;
+	private char gender;
 	@Column(name = "birthdate")
 	private Date birthdate;
 	@Column(name = "status")
@@ -71,12 +71,12 @@ public class Tperson implements Serializable{
 		  this.secondlastname=secondlastname;
 	}
 
-	public String getGender(){
-		 return gender;
+	public char getGender() {
+		return gender;
 	}
 
-	public void setGender(String gender){
-		  this.gender=gender;
+	public void setGender(char gender) {
+		this.gender = gender;
 	}
 
 	public Date getBirthdate(){

@@ -66,7 +66,7 @@ public class TuserServiceImpl implements TuserService{
 			tperson.setCreatedBy(1);
 			tperson.setCreatedAt(new Date());
 			tperson.setStatus(1);
-			tperson.setGender(data.get("gender").toString());
+			tperson.setGender('M');
 			tperson.setModifiedAt(new Date());
 			personRepo.save(tperson);
 			user.setPassword(data.get("password").toString());
@@ -89,8 +89,8 @@ public class TuserServiceImpl implements TuserService{
 			role.setStatus(1);
 			roleRepo.save(role);
 			tesista.setIdPerson(tperson);
-			tesista.setEnrollment(data.get("enrrolment").toString());
-			tesista.setIdCatDegree(Integer.parseInt(data.get("idCatDegree").toString()));
+			tesista.setEnrollment(data.get("mat").toString());
+			tesista.setIdCatDegree(new Integer(2));
 			tesista.setStatus(1);
 			tesista.setModifiedBy(1);
 			tesista.setCreatedBy(1);

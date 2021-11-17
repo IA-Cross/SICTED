@@ -72,7 +72,7 @@ public class TpersonServiceImpl implements TpersonService{
 			}
 			//gender
 			if(data.containsKey("gender")){
-				String gender = data.get("gender").toString();
+				char gender = data.get("gender").toString().charAt(0);
 				tpersonOptional.setGender(gender);
 			}
 			//birthdate
