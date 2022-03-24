@@ -36,8 +36,8 @@ public class TtesistaEndpoint{
 	return response;
 	}
 
-	@PostMapping("/update/{id}")
-	public ResponseEntity<ResponseBody<Void>> update(@PathVariable Integer id, @RequestBody Map<String,Object> data){
+	@PostMapping("/update")
+	public ResponseEntity<ResponseBody<Void>> update(@RequestParam("id") int id, @RequestBody Map<String,Object> data){
 		LOGGER.debug(">>>> update->id: {}, ttesista: {}",id,data);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -49,8 +49,8 @@ public class TtesistaEndpoint{
 	return response;
 	}
 
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<ResponseBody<Void>> delete(@PathVariable Integer id){
+	@GetMapping("/delete")
+	public ResponseEntity<ResponseBody<Void>> delete(@RequestParam("id") int id){
 		LOGGER.debug(">>>> delete->id: {}",id);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -69,6 +69,20 @@ public class TtesistaEndpoint{
 		List<Ttesista>ttesistaList=null;
 		try{
 			ttesistaList=ttesistaService.findAll(page,size);
+			response=Utils.<List<Ttesista>>response(HttpStatus.OK,"Lista encontrada",ttesistaList);
+		}catch (Exception e){
+			response=Utils.<List<Ttesista>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesistaList);
+		}
+		return response;
+	}
+
+	@GetMapping("/searchByEnrrollment")
+	public ResponseEntity<ResponseBody<List<Ttesista>>> searchByEnrrollment(@RequestParam("enrrollment") String enrrollment){
+		LOGGER.debug(">>>> searchByEnrrollment <<<< enrrollment: {}",enrrollment);
+		ResponseEntity<ResponseBody<List<Ttesista>>> response=null;
+		List<Ttesista>ttesistaList=null;
+		try{
+			ttesistaList=ttesistaService.searchByEnrrollment(enrrollment);
 			response=Utils.<List<Ttesista>>response(HttpStatus.OK,"Lista encontrada",ttesistaList);
 		}catch (Exception e){
 			response=Utils.<List<Ttesista>>response(HttpStatus.NOT_FOUND,"Lista encontrada",ttesistaList);

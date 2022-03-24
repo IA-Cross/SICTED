@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -27,6 +28,12 @@ public class CspecialtiesServiceImpl implements CspecialtiesService{
 	public void insert(Cspecialties cspecialties ) throws Exception{
 		LOGGER.debug(">>>Insert()->cspecialties:{}",cspecialties);
 		try{
+			cspecialties.setCreatedAt(new Date());
+			cspecialties.setModifiedAt(new Date());
+			cspecialties.setCreatedBy(1);
+			cspecialties.setModifiedBy(1);
+			cspecialties.setStatus(1);
+			LOGGER.debug(">>>Insert()->cspecialties:{}",cspecialties);
 			cspecialtiesRepository.save(cspecialties);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
@@ -38,41 +45,39 @@ public class CspecialtiesServiceImpl implements CspecialtiesService{
 
 		LOGGER.debug(">>>> update->id: {}, cspecialties: {}",id,data);
 		try{
-			Optional<Cspecialties> cspecialtiesOptional = cspecialtiesRepository.findById(id);
-			if(!cspecialtiesOptional.isPresent()){
+			Cspecialties cspecialtiesOptional = cspecialtiesRepository.findById(id).get();
+			if(cspecialtiesOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(cspecialtiesOptional.getStatus() == 0){
+				throw new Exception("No se encuentra el registro");
 			}
 			//description
 			if(data.containsKey("description")){
 				String description = data.get("description").toString();
-				cspecialtiesOptional.get().setDescription(description);
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				cspecialtiesOptional.get().setStatus(status);
+				cspecialtiesOptional.setDescription(description);
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				cspecialtiesOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				cspecialtiesOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				cspecialtiesOptional.get().setCreatedBy(createdBy);
+				cspecialtiesOptional.setCreatedBy(createdBy);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				cspecialtiesOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				cspecialtiesOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				cspecialtiesOptional.get().setModifiedBy(modifiedBy);
+				cspecialtiesOptional.setModifiedBy(modifiedBy);
 			}
-			cspecialtiesRepository.save(cspecialtiesOptional.get());
+			cspecialtiesRepository.save(cspecialtiesOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -82,11 +87,15 @@ public class CspecialtiesServiceImpl implements CspecialtiesService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Cspecialties> cspecialtiesOptional = cspecialtiesRepository.findById(id);
-			if(!cspecialtiesOptional.isPresent()){
+			Cspecialties cspecialtiesOptional = cspecialtiesRepository.findById(id).get();
+			if(cspecialtiesOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			cspecialtiesRepository.delete(cspecialtiesOptional.get());
+			if(cspecialtiesOptional.getStatus() == 0){
+				throw new Exception("No se encuentra el registro");
+			}
+			cspecialtiesOptional.setStatus(0);
+			cspecialtiesRepository.save(cspecialtiesOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

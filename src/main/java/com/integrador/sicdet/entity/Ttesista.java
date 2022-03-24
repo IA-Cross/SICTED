@@ -9,7 +9,11 @@ import java.util.Date;
 @Entity
 @Table(name= "ttesista")
 @NamedQueries({
-		@NamedQuery(name = "Ttesista.findByName",query = "select u from Ttesista u where u.status=1 and (u.idPerson.name like :author or u.idPerson.firstlastname like :author or u.idPerson.secondlastname like :author)")
+		@NamedQuery(name = "Ttesista.findByName",query = "select u from Ttesista u where u.status=1 and (u.idPerson.name like :name or u.idPerson.firstlastname like :name or u.idPerson.secondlastname like :name)"),
+		@NamedQuery(name = "Ttesista.findByIdPerson",query = "select u from Ttesista u where u.status=1 and u.idPerson.id=:id"),
+		@NamedQuery(name = "Ttesista.findByIdTesis",query = "select u from Ttesista u where u.status=1 and u.ttesisId.id=:id"),
+		@NamedQuery(name = "Ttesista.findAllActive",query = "select u from Ttesista u where u.status=1"),
+		@NamedQuery(name = "Ttesista.searchByEnrrollment",query = "select u from Ttesista u where u.status=1 and (u.enrollment like :enrrollment)")
 })
 public class Ttesista implements Serializable{ 
 
@@ -18,7 +22,7 @@ public class Ttesista implements Serializable{
 	@Column(name = "id")
 	private Integer id;
 	@ManyToOne
-	@JoinColumn(name = "id_person",referencedColumnName = "id")
+	@JoinColumn(name = "idperson",referencedColumnName = "id")
 	private Tperson idPerson;
 	@ManyToOne
 	@JoinColumn(name = "ttesis_id",referencedColumnName = "id")

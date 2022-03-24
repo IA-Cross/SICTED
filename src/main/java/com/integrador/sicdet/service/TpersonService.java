@@ -1,5 +1,6 @@
 package com.integrador.sicdet.service;
 import com.integrador.sicdet.entity.Tperson;
+
 import java.util.List;
 import java.util.Map;
 public interface TpersonService{
@@ -8,4 +9,6 @@ public interface TpersonService{
 	void delete(Integer id) throws Exception;
 	List<Tperson> findAll(int page,int size) throws Exception;
 	List<Tperson> findPersonjTest() throws Exception;
+	List<Tperson> searchPerson(String name) throws Exception;
+	List<Tperson> personsWithoutUser() throws Exception;
 }

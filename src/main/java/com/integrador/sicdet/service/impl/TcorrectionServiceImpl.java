@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -28,6 +29,12 @@ public class TcorrectionServiceImpl implements TcorrectionService{
 	public void insert(Tcorrection tcorrection ) throws Exception{
 		LOGGER.debug(">>>Insert()->tcorrection:{}",tcorrection);
 		try{
+			tcorrection.setCreatedAt(new Date());
+			tcorrection.setModifiedAt(new Date());
+			tcorrection.setCreatedBy(1);
+			tcorrection.setModifiedBy(1);
+			tcorrection.setStatus(1);
+			LOGGER.debug(">>>Insert()->tcorrection:{}",tcorrection);
 			tcorrectionRepository.save(tcorrection);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
@@ -39,56 +46,53 @@ public class TcorrectionServiceImpl implements TcorrectionService{
 
 		LOGGER.debug(">>>> update->id: {}, tcorrection: {}",id,data);
 		try{
-			Optional<Tcorrection> tcorrectionOptional = tcorrectionRepository.findById(id);
-			if(!tcorrectionOptional.isPresent()){
-				throw new Exception("No existe el registro"
-				);
+			Tcorrection tcorrectionOptional = tcorrectionRepository.findById(id).get();
+			if(tcorrectionOptional == null){
+				throw new Exception("No existe el registro");
+			}
+			if(tcorrectionOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//idTesis
 			if(data.containsKey("idTesis")){
-				tcorrectionOptional.get().setIdTesis(new Ttesis());
-				tcorrectionOptional.get().getIdTesis().setId((Integer)data.get("idTesis"));
+				tcorrectionOptional.setIdTesis(new Ttesis());
+				tcorrectionOptional.getIdTesis().setId((Integer)data.get("idTesis"));
 			}
 			//description
 			if(data.containsKey("description")){
 				String description = data.get("description").toString();
-				tcorrectionOptional.get().setDescription(description);
+				tcorrectionOptional.setDescription(description);
 			}
 			//date
 			if(data.containsKey("date")){
 				Date date = (Date)data.get("date");
-				tcorrectionOptional.get().setDate(date);
+				tcorrectionOptional.setDate(date);
 			}
 			//text
 			if(data.containsKey("text")){
-				tcorrectionOptional.get().setText(data.get("text").toString());
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				tcorrectionOptional.get().setStatus(status);
+				tcorrectionOptional.setText(data.get("text").toString());
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tcorrectionOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tcorrectionOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tcorrectionOptional.get().setCreatedBy(createdBy);
+				tcorrectionOptional.setCreatedBy(createdBy);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				tcorrectionOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				tcorrectionOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				tcorrectionOptional.get().setModifiedBy(modifiedBy);
+				tcorrectionOptional.setModifiedBy(modifiedBy);
 			}
-			tcorrectionRepository.save(tcorrectionOptional.get());
+			tcorrectionRepository.save(tcorrectionOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -98,11 +102,15 @@ public class TcorrectionServiceImpl implements TcorrectionService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tcorrection> tcorrectionOptional = tcorrectionRepository.findById(id);
-			if(!tcorrectionOptional.isPresent()){
+			Tcorrection tcorrectionOptional = tcorrectionRepository.findById(id).get();
+			if(tcorrectionOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tcorrectionRepository.delete(tcorrectionOptional.get());
+			if(tcorrectionOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tcorrectionOptional.setStatus(0);
+			tcorrectionRepository.save(tcorrectionOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -121,6 +129,20 @@ public class TcorrectionServiceImpl implements TcorrectionService{
 		}
 		LOGGER.debug(">>>> findAll <<<< tcorrectionList: {}",tcorrectionList);
 		return tcorrectionList;
+	}
+
+	@Override
+	public List<Tcorrection> getCorrectionsByIdTesis(int page, int size, int idTesis) throws Exception {
+		List<Tcorrection> res=null;
+		Pageable pageable= PageRequest.of(page,size);
+		try {
+			res= tcorrectionRepository.findByIdTesis(idTesis,pageable);
+		}catch(Exception e){
+			LOGGER.error("Exception: {}",e);
+		}
+		LOGGER.debug(">>>> findAll <<<< res: {}",res);
+
+		return res;
 	}
 
 }

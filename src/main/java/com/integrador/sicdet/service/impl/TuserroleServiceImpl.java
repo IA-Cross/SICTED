@@ -1,5 +1,7 @@
 package com.integrador.sicdet.service.impl;
 
+import com.integrador.sicdet.entity.Crole;
+import com.integrador.sicdet.entity.Tuser;
 import com.integrador.sicdet.entity.Tuserrole;
 import com.integrador.sicdet.repository.TuserroleRepository;
 import com.integrador.sicdet.service.TuserroleService;
@@ -9,9 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -27,6 +30,12 @@ public class TuserroleServiceImpl implements TuserroleService{
 	public void insert(Tuserrole tuserrole ) throws Exception{
 		LOGGER.debug(">>>Insert()->tuserrole:{}",tuserrole);
 		try{
+			tuserrole.setCreatedAt(new Date());
+			tuserrole.setModifiedAt(new Date());
+			tuserrole.setCreatedBy(1);
+			tuserrole.setModifiedBy(1);
+			tuserrole.setStatus(1);
+			LOGGER.debug(">>>Insert()->tuserrole:{}",tuserrole);
 			tuserroleRepository.save(tuserrole);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
@@ -38,46 +47,44 @@ public class TuserroleServiceImpl implements TuserroleService{
 
 		LOGGER.debug(">>>> update->id: {}, tuserrole: {}",id,data);
 		try{
-			Optional<Tuserrole> tuserroleOptional = tuserroleRepository.findById(id);
-			if(!tuserroleOptional.isPresent()){
+			Tuserrole tuserroleOptional = tuserroleRepository.findById(id).get();
+			if(tuserroleOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(tuserroleOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
 			}
 			//iduser
 			if(data.containsKey("iduser")){
-				Integer iduser = (Integer)data.get("iduser");
-				tuserroleOptional.get().setIduser(iduser);
+				tuserroleOptional.setIduser(new Tuser());
+				tuserroleOptional.getIduser().setId((Integer)data.get("iduser"));
 			}
 			//idrol
 			if(data.containsKey("idrol")){
-				Integer idrol = (Integer)data.get("idrol");
-				tuserroleOptional.get().setIdrol(idrol);
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				tuserroleOptional.get().setStatus(status);
+				tuserroleOptional.setIdrol(new Crole());
+				tuserroleOptional.getIdrol().setId((Integer)data.get("idrol"));
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				tuserroleOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("createdAt"));
+				tuserroleOptional.setCreatedAt(createdAt);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				tuserroleOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				tuserroleOptional.setModifiedAt(modifiedAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				tuserroleOptional.get().setCreatedBy(createdBy);
+				tuserroleOptional.setCreatedBy(createdBy);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				tuserroleOptional.get().setModifiedBy(modifiedBy);
+				tuserroleOptional.setModifiedBy(modifiedBy);
 			}
-			tuserroleRepository.save(tuserroleOptional.get());
+			tuserroleRepository.save(tuserroleOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -87,11 +94,15 @@ public class TuserroleServiceImpl implements TuserroleService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Tuserrole> tuserroleOptional = tuserroleRepository.findById(id);
-			if(!tuserroleOptional.isPresent()){
+			Tuserrole tuserroleOptional = tuserroleRepository.findById(id).get();
+			if(tuserroleOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			tuserroleRepository.delete(tuserroleOptional.get());
+			if(tuserroleOptional.getStatus() == 0) {
+				throw new Exception("No existe el registro");				
+			}
+			tuserroleOptional.setStatus(0);
+			tuserroleRepository.save(tuserroleOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

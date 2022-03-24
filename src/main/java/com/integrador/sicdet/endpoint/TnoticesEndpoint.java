@@ -36,8 +36,8 @@ public class TnoticesEndpoint{
 	return response;
 	}
 
-	@PostMapping("/update/{id}")
-	public ResponseEntity<ResponseBody<Void>> update(@PathVariable Integer id, @RequestBody Map<String,Object> data){
+	@PostMapping("/update")
+	public ResponseEntity<ResponseBody<Void>> update(@RequestParam("id") int id, @RequestBody Map<String,Object> data){
 		LOGGER.debug(">>>> update->id: {}, tnotices: {}",id,data);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -49,8 +49,8 @@ public class TnoticesEndpoint{
 	return response;
 	}
 
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<ResponseBody<Void>> delete(@PathVariable Integer id){
+	@GetMapping("/delete")
+	public ResponseEntity<ResponseBody<Void>> delete(@RequestParam("id") int id){
 		LOGGER.debug(">>>> delete->id: {}",id);
 		ResponseEntity<ResponseBody<Void>> response=null;
 		try{
@@ -63,15 +63,16 @@ public class TnoticesEndpoint{
 	}
 
 	@GetMapping("/findAll")
-	public ResponseEntity<ResponseBody<List<Tnotices>>> findAll(@RequestParam("page") int page,@RequestParam("size") int size){
-		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",page,size);
+	public ResponseEntity<ResponseBody<List<Tnotices>>> findAll(@RequestParam("start") int start,@RequestParam("limit") int limit){
+		LOGGER.debug(">>>> findAll <<<< page: {} size: {}",start,limit);
 		ResponseEntity<ResponseBody<List<Tnotices>>> response=null;
 		List<Tnotices>tnoticesList=null;
 		try{
-			tnoticesList=tnoticesService.findAll(page,size);
+			tnoticesList=tnoticesService.findAll(start,limit);
+			System.out.println("Se ecncontro bien");
 			response=Utils.<List<Tnotices>>response(HttpStatus.OK,"Lista encontrada",tnoticesList);
 		}catch (Exception e){
-			response=Utils.<List<Tnotices>>response(HttpStatus.NOT_FOUND,"Lista encontrada",tnoticesList);
+			response=Utils.<List<Tnotices>>response(HttpStatus.NOT_FOUND,"Lista no encontrada",tnoticesList);
 		}
 		return response;
 	}

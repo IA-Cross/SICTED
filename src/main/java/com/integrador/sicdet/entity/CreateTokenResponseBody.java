@@ -3,7 +3,6 @@ package com.integrador.sicdet.entity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.List;
 import java.util.Map;
 
 public class CreateTokenResponseBody {
@@ -11,7 +10,7 @@ public class CreateTokenResponseBody {
     private String claveHash;
     private String email;
     private String otherIdentifier;
-    private List<String> roles;
+    private Map<String,String> roles;
     private Map<String,String> person;
     private Map<String,String> personExtensions;
 
@@ -35,12 +34,8 @@ public class CreateTokenResponseBody {
     public void setOtherIdentifier(String otherIdentifier) {
         this.otherIdentifier = otherIdentifier;
     }
-    public List<String> getRoles() {
-        return roles;
-    }
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
+    public Map<String, String> getRoles() { return roles; }
+    public void setRoles(Map<String, String> roles) { this.roles = roles; }
     public Map<String, String> getPerson() {
         return person;
     }

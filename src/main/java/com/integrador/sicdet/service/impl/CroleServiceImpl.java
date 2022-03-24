@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -27,6 +28,12 @@ public class CroleServiceImpl implements CroleService{
 	public void insert(Crole crole ) throws Exception{
 		LOGGER.debug(">>>Insert()->crole:{}",crole);
 		try{
+			crole.setCreatedAt(new Date());
+			crole.setModifiedAt(new Date());
+			crole.setCreatedBy(1);
+			crole.setModifiedBy(1);
+			crole.setStatus(1);
+			LOGGER.debug(">>>Insert()->crole:{}",crole);
 			croleRepository.save(crole);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
@@ -38,46 +45,44 @@ public class CroleServiceImpl implements CroleService{
 
 		LOGGER.debug(">>>> update->id: {}, crole: {}",id,data);
 		try{
-			Optional<Crole> croleOptional = croleRepository.findById(id);
-			if(!croleOptional.isPresent()){
+			Crole croleOptional = croleRepository.findById(id).get();
+			if(croleOptional == null){
 				throw new Exception("No existe el registro");
+			}
+			if(croleOptional.getStatus() == 0){
+				throw new Exception("No se encuentra el registro");
 			}
 			//code
 			if(data.containsKey("code")){
 				String code = data.get("code").toString();
-				croleOptional.get().setCode(code);
+				croleOptional.setCode(code);
 			}
 			//description
 			if(data.containsKey("description")){
 				String description = data.get("description").toString();
-				croleOptional.get().setDescription(description);
-			}
-			//status
-			if(data.containsKey("status")){
-				Integer status = (Integer)data.get("status");
-				croleOptional.get().setStatus(status);
+				croleOptional.setDescription(description);
 			}
 			//createdAt
 			if(data.containsKey("createdAt")){
-				Date createdAt = (Date)data.get("createdAt");
-				croleOptional.get().setCreatedAt(createdAt);
+				Date createdAt = new SimpleDateFormat("yyyy-MM-dd").parse((String)  data.get("createdAt"));
+				croleOptional.setCreatedAt(createdAt);
 			}
 			//createdBy
 			if(data.containsKey("createdBy")){
 				Integer createdBy = (Integer)data.get("createdBy");
-				croleOptional.get().setCreatedBy(createdBy);
+				croleOptional.setCreatedBy(createdBy);
 			}
 			//modifiedAt
 			if(data.containsKey("modifiedAt")){
-				Date modifiedAt = (Date)data.get("modifiedAt");
-				croleOptional.get().setModifiedAt(modifiedAt);
+				Date modifiedAt = new SimpleDateFormat("yyyy-MM-dd").parse((String) data.get("modifiedAt"));
+				croleOptional.setModifiedAt(modifiedAt);
 			}
 			//modifiedBy
 			if(data.containsKey("modifiedBy")){
 				Integer modifiedBy = (Integer)data.get("modifiedBy");
-				croleOptional.get().setModifiedBy(modifiedBy);
+				croleOptional.setModifiedBy(modifiedBy);
 			}
-			croleRepository.save(croleOptional.get());
+			croleRepository.save(croleOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);
@@ -87,11 +92,15 @@ public class CroleServiceImpl implements CroleService{
 	public void delete(Integer id) throws Exception{
 		LOGGER.debug(">>>> delete->id: {}",id);
 		try{
-			Optional<Crole> croleOptional = croleRepository.findById(id);
-			if(!croleOptional.isPresent()){
+			Crole croleOptional = croleRepository.findById(id).get();
+			if(croleOptional == null){
 				throw new Exception("No existe el registro");
 			}
-			croleRepository.delete(croleOptional.get());
+			if(croleOptional.getStatus() == 0){
+				throw new Exception("No se encuentra el registro");
+			}
+			croleOptional.setStatus(0);
+			croleRepository.save(croleOptional);
 		}catch (Exception e){
 			LOGGER.error("Exception: {}",e);
 			throw new Exception(e);

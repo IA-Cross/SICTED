@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Date;
 @Entity
 @Table(name= "tcorrection")
+@NamedQueries({
+	@NamedQuery(name="Tcorrection.findByIdTesis",query = "select c from Tcorrection c where c.status=1 and c.idTesis.id=:idTesis")
+})
 public class Tcorrection implements Serializable{ 
 
 	@Id

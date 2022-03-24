@@ -11,4 +11,9 @@ public interface TtesisRepository extends JpaRepository<Ttesis,Integer>{
     List<Ttesis> findAllActive();
     List<Ttesis> searchTesis(@Param("title")  String title, @Param("advisor")  int advisor);
     List<Ttesis> findByIdActive(@Param("id") int id);
+    List<Ttesis> findByAdvisor(@Param("id") int id);
+    List<Ttesis> findByTitle(@Param("title") String title);
+    Ttesis findById(@Param("id") int id);
+    Ttesis searchTesisByTitle(@Param("titulo") String titulo);
+    List<Ttesis> findByIdAsesor(@Param("id") int id);
 }

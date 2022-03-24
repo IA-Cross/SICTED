@@ -7,4 +7,5 @@ public interface TtesistaService{
 	void update(Integer id, Map<String,Object> data) throws Exception;
 	void delete(Integer id) throws Exception;
 	List<Ttesista> findAll(int page,int size) throws Exception;
+	List<Ttesista> searchByEnrrollment(String enrrollment) throws Exception;
 }

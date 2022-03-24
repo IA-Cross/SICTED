@@ -9,7 +9,10 @@ import java.util.Date;
 @Entity
 @Table(name= "tperson")
 @NamedQueries({
-		@NamedQuery(name = "Tperson.findPersonjTest",query = "select c from Tperson c where c.status=1")
+		@NamedQuery(name = "Tperson.findPersonjTest",query = "select c from Tperson c where c.status=1"),
+		@NamedQuery(name = "Tperson.findByIdActive", query = "select s from Tperson s where s.id = :id and s.status=1"),
+		@NamedQuery(name = "Tperson.findAllActive", query = "select s from Tperson s where s.status=1"),
+		@NamedQuery(name = "Tperson.searchByName", query = "select s from Tperson s where s.status=1 and (s.name like :name or s.firstlastname like :name or s.secondlastname like :name)"),
 })
 public class Tperson implements Serializable{ 
 
@@ -22,7 +25,7 @@ public class Tperson implements Serializable{
 	private String firstlastname;
 	private String secondlastname;
 	@Column(name = "gender")
-	private String gender;
+	private char gender;
 	@Column(name = "birthdate")
 	private Date birthdate;
 	@Column(name = "status")
@@ -68,12 +71,12 @@ public class Tperson implements Serializable{
 		  this.secondlastname=secondlastname;
 	}
 
-	public String getGender(){
-		 return gender;
+	public char getGender() {
+		return gender;
 	}
 
-	public void setGender(String gender){
-		  this.gender=gender;
+	public void setGender(char gender) {
+		this.gender = gender;
 	}
 
 	public Date getBirthdate(){
